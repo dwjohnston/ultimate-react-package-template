@@ -1,0 +1,95 @@
+
+
+
+:root {
+    --background-color: #2f2f2f;
+    --background-color-deep: #181818;
+
+    --border-color: #6a6a6a;
+
+    --text-color: #f2eaea;
+    --highlight-bg-color: #8d7f46;
+    --highlight-text-color:  #d0d0d0;
+
+    --highlight-bg-color-hover: #535b80;
+
+
+    color: var(--text-color)
+
+}
+
+
+.text-highlight-provider-outer {
+    background-color: var(--background-color-deep);
+    display: flex; 
+    flex-flow: row nowrap;
+
+}
+
+.text-highlight-content-container {
+
+    max-width: 800px;
+
+    flex: 0 1 800px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: solid 1px var(--border-color);
+}
+
+.text-highlight-left-gutter, .text-highlight-right-gutter {
+    flex: 1 1 auto;
+    position: relative;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 2px;
+}
+
+.text-highlight {
+    background-color: var(--highlight-bg-color);
+
+
+}
+
+.text-highlight-comment {
+    background-color: var(--highlight-bg-color);
+    color: var(--highlight-text-color);
+    box-sizing: border-box;
+
+    /* position: absolute;  */
+}
+
+.text-highlight-comment-outer {
+    display: flex;
+    flex-flow: column nowrap; 
+    justify-content: flex-end;
+
+    /* border: solid 1px red; */
+}
+
+.text-highlight-hover {
+    background-color: var(--highlight-bg-color-hover);
+}
+
+.text-highlight-selected {
+    border: solid 1px blue;
+}
+
+@media screen and (max-width: 800px) {
+
+    .text-highlight-right-gutter {
+        position: fixed; 
+        display: block;
+        bottom: 0; 
+        left: 0; 
+        right: 0; 
+        
+    }
+
+    .text-highlight-left-gutter, .text-highlight-right-gutter {
+        >*:not(.text-highlight-selected) {
+            display: none;
+        }
+    }
+
+    
+}
