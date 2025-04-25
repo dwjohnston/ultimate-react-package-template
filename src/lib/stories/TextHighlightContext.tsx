@@ -1,4 +1,5 @@
-import React, { PropsWithChildren, useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
+"use client"
+import React, { PropsWithChildren, RefObject, useContext, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import ClickAwayListener from "react-click-away-listener";
 import { createPortal } from "react-dom";
 
@@ -9,18 +10,22 @@ export type TextHighlightProviderProps = {
      * If not provided, this will be main div that all the content sits in.
      */
     resizeObserverEls?: Array<HTMLElement>;
+
+    commentContainerEl: HTMLElement;
 }
 
 
 type TextHighlightContext = {
     registerHighlight: (element: HTMLSpanElement, comment: HTMLDivElement) => void;
-    gutterEl: HTMLDivElement;
+    gutterRef: RefObject<HTMLElement |null>;
 }
 const TextHighlightContext = React.createContext<TextHighlightContext>({
     registerHighlight: () => {
         throw new Error("registerHighlight not implemented");
     },
-    gutterEl: document.createElement("div")
+    gutterRef: {
+        current:null
+    }
 });
 
 
@@ -127,10 +132,10 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
         <div className="text-highlight-left-gutter"></div>
 
         <div className="text-highlight-content-container" ref={containerRef}>
-            {gutterRef.current && <TextHighlightContext.Provider value={{ registerHighlight, gutterEl: gutterRef.current }}>
+            <TextHighlightContext.Provider value={{ registerHighlight, gutterRef }}>
                 {props.children}
             </TextHighlightContext.Provider>
-            }
+            
         </div>        <div className="text-highlight-right-gutter" ref={gutterRef}>
 
         </div>
@@ -151,8 +156,13 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
 
     const [hasHover, setHasHover] = React.useState(false);
     const [isSelected, setIsSelected] = React.useState(false);
+    const id = useId();
+
+    const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {
+        setIsReady(true);
+
         if (spanRef.current && commentRef.current) {
 
             highlightContext.registerHighlight(spanRef.current, commentRef.current)
@@ -165,6 +175,7 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
 
 
     return <><span className={`text-highlight${hasHover ? ' text-highlight-hover' : ''}`} ref={spanRef}
+        aria-describedby={id}
         onMouseEnter={(() => setHasHover(true))}
         onMouseLeave={(() => setHasHover(false))}
         onClick={() => {
@@ -178,7 +189,9 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
         {props.children}
     </span>
 
-        {createPortal(
+
+{highlightContext.gutterRef.current &&
+        createPortal(
             <ClickAwayListener onClickAway={() => {
                 if (isSelected) {
                     setIsSelected(false)
@@ -186,19 +199,18 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
             }}>
 
                 <div className={`text-highlight-comment-outer${isSelected ? ' text-highlight-selected' : ''}`}>
-                    {isSelected ? "selected" : "not selected"}
-
                     <button onClick={() => setIsSelected(false)}>close </button>
 
                     <div className={`text-highlight-comment${hasHover ? ' text-highlight-hover' : ''}`} ref={commentRef}
                         onMouseEnter={(() => setHasHover(true))}
-                        onMouseLeave={(() => setHasHover(false))}>
+                        onMouseLeave={(() => setHasHover(false))}
+                        id={id}>
                         {props.commentContent}
                     </div>
                 </div>
             </ClickAwayListener>
             ,
-            highlightContext.gutterEl
+            highlightContext.gutterRef.current
         )}
     </>
 }

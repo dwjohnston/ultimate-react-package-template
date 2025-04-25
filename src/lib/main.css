@@ -1,6 +1,3 @@
-
-
-
 :root {
     --background-color: #2f2f2f;
     --background-color-deep: #181818;
@@ -9,19 +6,18 @@
 
     --text-color: #f2eaea;
     --highlight-bg-color: #8d7f46;
-    --highlight-text-color:  #d0d0d0;
+    --highlight-text-color: #d0d0d0;
 
     --highlight-bg-color-hover: #535b80;
 
 
     color: var(--text-color)
-
 }
 
 
 .text-highlight-provider-outer {
     background-color: var(--background-color-deep);
-    display: flex; 
+    display: flex;
     flex-flow: row nowrap;
 
 }
@@ -36,7 +32,8 @@
     border: solid 1px var(--border-color);
 }
 
-.text-highlight-left-gutter, .text-highlight-right-gutter {
+.text-highlight-left-gutter,
+.text-highlight-right-gutter {
     flex: 1 1 auto;
     position: relative;
     display: flex;
@@ -60,7 +57,7 @@
 
 .text-highlight-comment-outer {
     display: flex;
-    flex-flow: column nowrap; 
+    flex-flow: column nowrap;
     justify-content: flex-end;
 
     /* border: solid 1px red; */
@@ -70,26 +67,34 @@
     background-color: var(--highlight-bg-color-hover);
 }
 
-.text-highlight-selected {
-    border: solid 1px blue;
+.text-highlight-selected {}
+
+.text-highlight-comment-outer>button {
+    display: none;
 }
+
 
 @media screen and (max-width: 800px) {
 
-    .text-highlight-right-gutter {
-        position: fixed; 
+    .text-highlight-comment-outer>button {
         display: block;
-        bottom: 0; 
-        left: 0; 
-        right: 0; 
-        
     }
 
-    .text-highlight-left-gutter, .text-highlight-right-gutter {
+    .text-highlight-right-gutter {
+        position: fixed;
+        display: block;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+    }
+
+    .text-highlight-left-gutter,
+    .text-highlight-right-gutter {
         >*:not(.text-highlight-selected) {
             display: none;
         }
     }
 
-    
+
 }
