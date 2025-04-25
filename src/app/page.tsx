@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styles from "./page.module.css";
-import { TextHighlight, TextHighlightProvider } from "@/lib/stories/TextHighlightContext";
+import { TextHighlight, TextHighlightProvider } from "@/lib/TextHighlightContext";
 import "../lib/main.css"
 export default function Home() {
   return (

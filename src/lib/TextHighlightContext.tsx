@@ -29,6 +29,7 @@ const TextHighlightContext = React.createContext<TextHighlightContext>({
 function recalculatePositions(mapOfSpansAndComments: Map<HTMLSpanElement, HTMLDivElement>) {
     const entries = mapOfSpansAndComments.entries();
 
+
     // Sort the highlights so they go top to bottom, left to right
     // Possibly not needed?
     const entriesArray = Array.from(entries).toSorted((a, b) => {
@@ -85,7 +86,7 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
     useEffect(() => {
         setIsReady(true);
 
-        if (!containerRef.current) {
+        if (!containerRef.current || !gutterRef.current) {
             return;
         }
 
@@ -97,7 +98,8 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
         }
 
         const resizeObserver = new ResizeObserver(onResize);
-        (props.resizeObserverEls ?? [containerRef.current]).forEach((v) => {
+        (props.resizeObserverEls ?? [containerRef.current, gutterRef.current]).forEach((v) => {
+            console.log('attach ')
             resizeObserver.observe(v);
         })
 
@@ -148,6 +150,8 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
 
     const [isReady, setIsReady] = useState(false);
 
+    
+
     useEffect(() => {
         setIsReady(true);
 
@@ -158,7 +162,7 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
 
 
 
-    }, []);
+    }, [isReady]);
 
 
 

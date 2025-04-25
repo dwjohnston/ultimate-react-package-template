@@ -11,7 +11,12 @@
   "main": "./dist/exports.js",
   "files": ["./dist"],
   "exports": {
-    ".": "./dist/exports.js"
+    ".": "./dist/exports.js",
+    "./dist/main.css": {
+      "import": "./dist/main.css",
+      "require": "./dist/main.css"
+  }
+
   }, 
   "scripts": {
     "next:dev": "next dev --turbopack",

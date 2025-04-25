@@ -10,8 +10,6 @@
 
     --highlight-bg-color-hover: #535b80;
 
-
-    color: var(--text-color)
 }
 
 
@@ -28,7 +26,6 @@
 
     flex: 0 1 800px;
     background-color: var(--background-color);
-    color: var(--text-color);
     border: solid 1px var(--border-color);
 }
 
@@ -43,6 +40,8 @@
 
 .text-highlight {
     background-color: var(--highlight-bg-color);
+    color: var(--text-color);
+
 
 
 }
@@ -52,6 +51,11 @@
     color: var(--highlight-text-color);
     box-sizing: border-box;
 
+    margin-left: 0.4em;
+    padding: 0.5em;
+    font-size: 0.75em;
+    max-width: 200px;
+
     /* position: absolute;  */
 }
 
@@ -59,6 +63,7 @@
     display: flex;
     flex-flow: column nowrap;
     justify-content: flex-end;
+    font-size: 0.75em;
 
     /* border: solid 1px red; */
 }
@@ -75,6 +80,27 @@
 
     .text-highlight-comment-outer>button {
         display: block;
+        margin-left: auto;
+
+        background: none;
+        background-color: var(--highlight-bg-color-hover);
+        border: 1px solid white;
+        border-radius: 9999px;
+        /* fully rounded edges */
+        padding: 0.5em 1em;
+        color: white;
+        font: inherit;
+        cursor: pointer;
+        outline: none;
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .text-highlight-comment {
+        max-width: unset;
+        font-size: unset;
+        margin: 0;
+        padding: 2em 0.5em;
+        background-color: var(--highlight-bg-color-hover);
     }
 
     .text-highlight-right-gutter {
