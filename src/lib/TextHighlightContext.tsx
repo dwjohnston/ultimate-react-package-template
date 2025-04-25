@@ -26,16 +26,6 @@ const TextHighlightContext = React.createContext<TextHighlightContext>({
     }
 });
 
-
-type HighLightCommentProps = {
-
-}
-
-function HighlightComment() {
-
-}
-
-
 function recalculatePositions(mapOfSpansAndComments: Map<HTMLSpanElement, HTMLDivElement>) {
     const entries = mapOfSpansAndComments.entries();
 

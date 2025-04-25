@@ -67,12 +67,9 @@
     background-color: var(--highlight-bg-color-hover);
 }
 
-.text-highlight-selected {}
-
 .text-highlight-comment-outer>button {
     display: none;
 }
-
 
 @media screen and (max-width: 800px) {
 

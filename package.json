@@ -1,22 +1,39 @@
 {
-  "name": "react-package-boilerplate",
+  "name": "react-text-highlight",
+  "author": {
+    "name": "David Johnston",
+    "email": "david@blacksheepcode.com",
+    "url": "https://blacksheepcode.com"
+  },
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
+  "main": "./dist/exports.js",
+  "files": ["./dist"],
+  "exports": {
+    ".": "./dist/exports.js"
+  }, 
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
+    "next:dev": "next dev --turbopack",
+    "next:build": "next build",
+    "next:start": "next start",
+    "next:lint": "next lint",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json && cp src/lib/*.css dist",
+    "prepublishOnly": "npm run build",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "next": "15.3.1",
-    "react": "^19.0.0",
-    "react-click-away-listener": "^2.4.0",
-    "react-dom": "^19.0.0"
+    "react-click-away-listener": "^2.4.0"
+  },
+  "peerDependencies": {
+    "react": ">=19.0.0",
+    "react-dom": ">=19.0.0"
   },
   "devDependencies": {
+    "react-dom": "^19.0.0",
+    "react": "^19.0.0",
+    "next": "15.3.1",
     "@chromatic-com/storybook": "^3.2.6",
     "@storybook/addon-essentials": "^8.6.12",
     "@storybook/addon-onboarding": "^8.6.12",

@@ -23,7 +23,15 @@ export function App() {
 
 Now use the highlights anywhere you need: 
 ```jsx
-<p>I am some text. <TextHighlight comment={<p>I am the associated comment.</p>}>This text is highlighted</TextHighlight>
+
+function MyComponent() {
+    <p>I am some text. <TextHighlight comment={
+        <p>I am the associated comment.</p>}>
+            This text is highlighted
+        </TextHighlight>
+    </p>
+}
+
 ```
 
 
