@@ -10,8 +10,6 @@ export type TextHighlightProviderProps = {
      * If not provided, this will be main div that all the content sits in.
      */
     resizeObserverEls?: Array<HTMLElement>;
-
-    commentContainerEl: HTMLElement;
 }
 
 

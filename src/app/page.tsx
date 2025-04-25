@@ -6,9 +6,6 @@ export default function Home() {
   return (
 
       <div>
-        <div className="comment-container">
-
-        </div>
       <TextHighlightProvider>
         <p>
           I am some <TextHighlight commentContent={<>I am the comment</>}>

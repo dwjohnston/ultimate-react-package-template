@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# react-text-highlight
 
-## Getting Started
+This is a lightweight component that will allow display highlighted spans in your main content, with linked comments/footnotes in the page margin. 
 
-First, run the development server:
+The component includes for having multiple components in close proximity stack nicely. 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+For mobile view, the comments are not displayed until they highlight is clicked.
+
+## How to use 
+
+At the top level of your application include the provider. 
+
+```jsx
+
+export function App() {
+    <TextHighlightProvider>
+        {/* rest of the application here*/}
+    </TextHighlightProvider>
+}
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Now use the highlights anywhere you need: 
+```jsx
+<p>I am some text. <TextHighlight comment={<p>I am the associated comment.</p>}>This text is highlighted</TextHighlight>
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+## Styling 
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Currently this is styled with regular class names and vanilla CSS. 
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This is working fine for my purposes, which is [my blog](https://blacksheepcode.com). 
 
-## Deploy on Vercel
+Take a look at css file and modify as needed. 
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+I've thought about full support for providing your own custom components. If this is something you need, then feel free to get in touch and I can take a look at it. 
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## SSR/RSC support 
+
+The highlighted span itself will be included in the server side rendering. The comment will not appear until rendering client side. 
+
+The reason for this is because this solution uses portals, which don't have particularly good support for server side rendering (well, actually the problem is that refs don't work very well in SSR). Essentially the issue is that we need access to the element that holds the comments, but with regular use of a ref, the element won't be attached to the ref until second render. (This is the best discussion I could find of this topic: https://stackoverflow.com/a/68659960/1068446)
+
+
+
