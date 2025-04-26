@@ -114,6 +114,7 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
 
     const registerHighlight = (element: HTMLSpanElement, commentEl: HTMLDivElement) => {
         highlightedElementsRef.current.set(element, commentEl);
+        recalculatePositions(highlightedElementsRef.current);
     }
 
 
@@ -190,7 +191,7 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
                 }
             }}>
 
-                <div className={`text-highlight-comment-outer${isSelected ? ' text-highlight-selected' : ''}`}>
+                <div className={`text-highlight-comment-outer${isSelected ? ' text-highlight-selected' : ''}${isReady? '' : 'not-ready'}`}>
                     <button onClick={() => setIsSelected(false)}>Close </button>
 
                     <div className={`text-highlight-comment${hasHover ? ' text-highlight-hover' : ''}`} ref={commentRef}

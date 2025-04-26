@@ -32,6 +32,7 @@
 
 .text-highlight-content-container {
     flex: 0 1 800px;
+    max-width: 100%;
 }
 
 .text-highlight-left-gutter,
@@ -40,7 +41,6 @@
     display: flex;
     flex-flow: column nowrap;
     gap: 2px;
-    padding: 4px;
 }
 
 .text-highlight {
@@ -56,6 +56,8 @@
     font-size: 0.75em;
 
     border: solid 1px transparent;
+    margin: 0 4px;
+
 }
 
 .text-highlight-comment {
@@ -64,10 +66,14 @@
     box-sizing: border-box;
 
     margin-left: 0.4em;
-    padding: 0.5em;
+    padding: 1em;
     font-size: 0.75em;
     max-width: 200px;
     border: solid 1px transparent;
+
+    &.not-ready {
+        display: none;
+    }
 }
 
 
@@ -107,7 +113,7 @@
 @media screen and (max-width: 800px) {
 
     .text-highlight-comment-outer {
-        background-color: var(--highlight-bg-color-hover);
+        background-color: var(--highlight-comment-bg);
 
     }
 
@@ -116,9 +122,9 @@
         margin: 2px 2px 0 auto;
 
         background: none;
-        background-color: var(--highlight-bg-color-hover);
-        border: 1px solid white;
-        border-radius: 9999px;
+        background-color: var(--highlight-comment-bg);
+        border: 1px solid var(--highlight-border-hover);
+        border-radius: 4px;
         /* fully rounded edges */
         padding: 0.5em 1em;
         color: var(--highlight-text-color);
@@ -135,8 +141,6 @@
         font-size: unset;
         margin: 0;
         padding: 0.5em 0.5em 2em;
-        background-color: var(--highlight-bg-color-hover);
-
 
     }
 
