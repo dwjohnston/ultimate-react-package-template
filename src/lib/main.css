@@ -1,62 +1,52 @@
 :root {
-    --background-color: #2f2f2f;
-    --background-color-deep: #181818;
 
-    --border-color: #6a6a6a;
 
-    --text-color: #f2eaea;
-    --highlight-bg-color: #8d7f46;
-    --highlight-text-color: #d0d0d0;
-
-    --highlight-bg-color-hover: #535b80;
-
+    --highlight-bg-color: #fde05f;
+    --highlight-text-color: #000000;
+    --highlight-bg-color-hover: #fde05f;
+    --highlight-border-hover: rgb(186, 151, 105);
+    --highlight-border-selected: rgb(225, 139, 25);
+    --highlight-comment-box-shadow: rgba(0, 0, 0, 0.2);
+    --highlight-comment-bg: #f6e69c;
 }
+
+@media (prefers-color-scheme: dark) {
+    :root {
+
+        --highlight-bg-color: #4a4b80;
+        --highlight-text-color: #fff;
+        --highlight-bg-color-hover: #4a4b80;
+        --highlight-border-hover: #5b5f99;
+        --highlight-border-selected: #004a88;
+        --highlight-comment-box-shadow: rgba(0, 0, 0, 0.2);
+        --highlight-comment-bg: #223253;
+    }
+}
+
 
 
 .text-highlight-provider-outer {
-    background-color: var(--background-color-deep);
     display: flex;
     flex-flow: row nowrap;
-
 }
 
 .text-highlight-content-container {
-
-    max-width: 800px;
-
     flex: 0 1 800px;
-    background-color: var(--background-color);
-    border: solid 1px var(--border-color);
 }
 
 .text-highlight-left-gutter,
 .text-highlight-right-gutter {
     flex: 1 1 auto;
-    position: relative;
     display: flex;
     flex-flow: column nowrap;
     gap: 2px;
+    padding: 4px;
 }
 
 .text-highlight {
     background-color: var(--highlight-bg-color);
-    color: var(--text-color);
-
-
-
-}
-
-.text-highlight-comment {
-    background-color: var(--highlight-bg-color);
     color: var(--highlight-text-color);
-    box-sizing: border-box;
-
-    margin-left: 0.4em;
-    padding: 0.5em;
-    font-size: 0.75em;
-    max-width: 200px;
-
-    /* position: absolute;  */
+    border: solid 1px transparent;
 }
 
 .text-highlight-comment-outer {
@@ -65,11 +55,49 @@
     justify-content: flex-end;
     font-size: 0.75em;
 
-    /* border: solid 1px red; */
+    border: solid 1px transparent;
 }
 
-.text-highlight-hover {
-    background-color: var(--highlight-bg-color-hover);
+.text-highlight-comment {
+    background-color: var(--highlight-comment-bg);
+    color: var(--highlight-text-color);
+    box-sizing: border-box;
+
+    margin-left: 0.4em;
+    padding: 0.5em;
+    font-size: 0.75em;
+    max-width: 200px;
+    border: solid 1px transparent;
+}
+
+
+
+/**
+    Sorry for the confusion here. 
+
+    Basically
+
+    .text-highlight-hover is applied to both .text-highlight and .text-highlight-comment
+
+    .text-highlight-selected is applied to .text-highlight and .text-highlight-comment-outer, so we need to select with > 
+
+    The reason for this is to do with the behaviour of the comments/comments outer in mobile view.
+*/
+.text-highlight.text-highlight-hover,
+.text-highlight.text-highlight-selected,
+.text-highlight-selected>.text-highlight-comment,
+.text-highlight-comment.text-highlight-hover {
+
+    border-color: var(--highlight-border-hover);
+    box-shadow: 1px 1px 2px var(--highlight-comment-box-shadow);
+    transition: box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+
+
+.text-highlight-selected.text-highlight,
+.text-highlight-selected>.text-highlight-comment {
+    border: solid 1px var(--highlight-border-selected);
 }
 
 .text-highlight-comment-outer>button {
@@ -78,9 +106,14 @@
 
 @media screen and (max-width: 800px) {
 
+    .text-highlight-comment-outer {
+        background-color: var(--highlight-bg-color-hover);
+
+    }
+
     .text-highlight-comment-outer>button {
         display: block;
-        margin-left: auto;
+        margin: 2px 2px 0 auto;
 
         background: none;
         background-color: var(--highlight-bg-color-hover);
@@ -88,34 +121,59 @@
         border-radius: 9999px;
         /* fully rounded edges */
         padding: 0.5em 1em;
-        color: white;
+        color: var(--highlight-text-color);
         font: inherit;
         cursor: pointer;
         outline: none;
         transition: background 0.2s, color 0.2s;
+
+
     }
 
     .text-highlight-comment {
         max-width: unset;
         font-size: unset;
         margin: 0;
-        padding: 2em 0.5em;
+        padding: 0.5em 0.5em 2em;
         background-color: var(--highlight-bg-color-hover);
-    }
 
-    .text-highlight-right-gutter {
-        position: fixed;
-        display: block;
-        bottom: 0;
-        left: 0;
-        right: 0;
 
     }
 
     .text-highlight-left-gutter,
     .text-highlight-right-gutter {
+
+        >* {
+            transform: translateY(100%);
+            opacity: 0;
+            position: fixed;
+            display: block;
+            bottom: 0;
+            left: 0;
+            right: 0;
+
+            /* Animate transform and opacity */
+            transition:
+                transform 0.1s ease-out,
+                opacity 0.1s ease-out;
+        }
+
+        >*.text-highlight-selected {
+            transform: translateY(0);
+            opacity: 1;
+
+            box-shadow: 0 -2px 2px var(--highlight-comment-box-shadow);
+
+            .text-highlight-comment {
+                border: none;
+                box-shadow: none;
+                ;
+
+            }
+        }
+
         >*:not(.text-highlight-selected) {
-            display: none;
+            opacity: 0;
         }
     }
 

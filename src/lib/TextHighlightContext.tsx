@@ -166,7 +166,7 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
 
 
 
-    return <><span className={`text-highlight${hasHover ? ' text-highlight-hover' : ''}`} ref={spanRef}
+    return <><span className={`text-highlight${hasHover ? ' text-highlight-hover' : ''}${isSelected ? ' text-highlight-selected' : ''}`} ref={spanRef}
         aria-describedby={id}
         onMouseEnter={(() => setHasHover(true))}
         onMouseLeave={(() => setHasHover(false))}
@@ -191,7 +191,7 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
             }}>
 
                 <div className={`text-highlight-comment-outer${isSelected ? ' text-highlight-selected' : ''}`}>
-                    <button onClick={() => setIsSelected(false)}>close </button>
+                    <button onClick={() => setIsSelected(false)}>Close </button>
 
                     <div className={`text-highlight-comment${hasHover ? ' text-highlight-hover' : ''}`} ref={commentRef}
                         onMouseEnter={(() => setHasHover(true))}
