@@ -1,5 +1,7 @@
 # react-text-highlight
 
+Storybook here: https://dwjohnston.github.io/react-text-highlight
+
 This is a lightweight component that will allow display highlighted spans in your main content, with linked comments/footnotes in the page margin. 
 
 The component includes for having multiple components in close proximity stack nicely. 
