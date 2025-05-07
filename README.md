@@ -40,19 +40,58 @@ function MyComponent() {
 
 ## Styling 
 
-Currently this is styled with regular class names and vanilla CSS. 
+### Approach 1 - Use the default components and style with vanilla CSS.
 
-This is working fine for my purposes, which is [my blog](https://blacksheepcode.com). 
+You can use the default components, and style them with the [existing stylesheet](./src/lib/main.css) or copy it and modify it for your tastes.
 
-Take a look at css file and modify as needed. 
 
-I've thought about full support for providing your own custom components. If this is something you need, then feel free to get in touch and I can take a look at it. 
+Include the stylesheet with
+
+```
+import "react-text-highlight/dist/main.css";
+```
+
+
+### Approach 2 - Provide your own components 
+
+You can provide your own components by passing them into the context provider: 
+
+```jsx
+<TextHighlightProvider
+    Highlight={MyHighlightComponent}
+    Comment={MyCommentComponent}
+>
+    
+</TextHighlightProvider>
+```
+
+These are the requisite typings: 
+
+```typescript
+type CommentProps = PropsWithChildren<{
+    id: string;
+    hasHover: boolean;
+    setSelectedStatus: (isSelected: boolean) => void;
+    setHoverStatus: (hasHover: boolean) => void;
+    ref: RefObject<HTMLDivElement | null>;
+}>
+
+type HighlightProps = PropsWithChildren<{
+    commentId: string;
+    isSelected: boolean;
+    hasHover: boolean;
+    setSelectedStatus: (isSelected: boolean) => void;
+    setHoverStatus: (hasHover: boolean) => void;
+    ref: RefObject<HTMLSpanElement | null>;
+}>
+```
+
 
 ## SSR/RSC support 
 
 The highlighted span itself will be included in the server side rendering. The comment will not appear until rendering client side. 
 
-The reason for this is because this solution uses portals, which don't have particularly good support for server side rendering (well, actually the problem is that refs don't work very well in SSR). Essentially the issue is that we need access to the element that holds the comments, but with regular use of a ref, the element won't be attached to the ref until second render. (This is the best discussion I could find of this topic: https://stackoverflow.com/a/68659960/1068446)
+The reason for this is because this solution uses portals, which don't have particularly good support for server side rendering (well, actually the problem is that refs don't work very well in SSR). Essentially the issue is that we need access to the element that holds the comments, but with regular use of a ref, the element won't be attached to the ref until second render. (This is the best discussion I could find of this topic: https://stackoverflow.com/a/68659960)
 
 
 

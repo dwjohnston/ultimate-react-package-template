@@ -9,19 +9,54 @@ export type TextHighlightProviderProps = {
 
 
 type CommentProps = PropsWithChildren<{
+    /**
+     * Attach this to the `id` attribute of your main element. 
+     * 
+     * This for a11y purposes so the highlight can be linked with the comment.
+     */
     id: string;
     hasHover: boolean;
+    /**
+     * Attach this to click handlers for your component
+     * @param hasHover 
+     * @returns 
+     */
     setSelectedStatus: (isSelected: boolean) => void;
+    /**
+     * Attach this to onMouseEnter and onMouseLeave event handlers
+     * @param hasHover 
+     * @returns 
+     */
     setHoverStatus: (hasHover: boolean) => void;
+
+    /**
+     * This ref needs to be attached to the main element 
+     * 
+     */
     ref: RefObject<HTMLDivElement | null>;
 }>
 
 type HighlightProps = PropsWithChildren<{
+    /**
+     * Attach this to the `id` attribute of your main element. 
+     * 
+     * This for a11y purposes so the highlight can be linked with the comment.
+     */
     commentId: string;
     isSelected: boolean;
     hasHover: boolean;
     setSelectedStatus: (isSelected: boolean) => void;
+    /**
+     * Attach this to onMouseEnter and onMouseLeave event handlers
+     * @param hasHover 
+     * @returns 
+     */
     setHoverStatus: (hasHover: boolean) => void;
+
+    /**
+     * This ref needs to be attached to the main element 
+     * 
+     */
     ref: RefObject<HTMLSpanElement | null>;
 }>
 
