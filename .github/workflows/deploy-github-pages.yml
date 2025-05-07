@@ -1,3 +1,7 @@
+# Created following this guide: 
+# https://storybook.js.org/docs/sharing/publish-storybook#github-pages
+
+
 # Workflow name
 name: Build and Publish Storybook to GitHub Pages
 
@@ -30,6 +34,6 @@ jobs:
       - uses: bitovi/github-actions-storybook-to-github-pages@v1.0.3
         with:
           install_command: npm install 
-          build_command: npm build-storybook 
+          build_command: npm run build-storybook 
           path: storybook-static 
           checkout: false 
