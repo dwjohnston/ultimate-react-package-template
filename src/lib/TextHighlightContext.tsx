@@ -4,12 +4,7 @@ import ClickAwayListener from "react-click-away-listener";
 import { createPortal } from "react-dom";
 
 export type TextHighlightProviderProps = {
-    /**
-     * A list of elements to observe for purposes of recalculating the the comment positioning. 
-     * 
-     * If not provided, this will be main div that all the content sits in.
-     */
-    resizeObserverEls?: Array<HTMLElement>;
+
 }
 
 
@@ -171,7 +166,7 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
         }
 
         const resizeObserver = new ResizeObserver(onResize);
-        (props.resizeObserverEls ?? [containerRef.current, gutterRef.current]).forEach((v) => {
+        ([containerRef.current, gutterRef.current]).forEach((v) => {
             console.log('attach ')
             resizeObserver.observe(v);
         })
@@ -200,7 +195,8 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
                 {props.children}
             </TextHighlightContext.Provider>
 
-        </div>        <div className="text-highlight-right-gutter" ref={gutterRef}>
+        </div>
+        <div className="text-highlight-right-gutter" ref={gutterRef}>
 
         </div>
 

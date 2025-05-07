@@ -188,6 +188,13 @@ export const Main: Story = {
 		expect(highlightEls).toHaveLength(5);
 
 
+		// Weird bug here. 
+		// For some reason on local dev this doesn't matter, but 
+		// For production it does
+		await waitFor(() => {
+			expect(canvas.getAllByTestId("rth-comment")).toHaveLength(5);
+		});
+
 		// This has been a good play around with storybook testing. 
 		// Really quite enjoying it 
 		if (window.innerWidth < 800) {
@@ -353,7 +360,9 @@ export const SmallerExample: Story = {
 
 		const highlightEls = canvas.getAllByTestId("rth-highlight");
 		expect(highlightEls).toHaveLength(2);
-
+		await waitFor(() => {
+			expect(canvas.getAllByTestId("rth-comment")).toHaveLength(2);
+		});
 
 		// This has been a good play around with storybook testing. 
 		// Really quite enjoying it 
