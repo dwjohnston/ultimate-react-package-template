@@ -1,5 +1,5 @@
 "use client"
-import React, { PropsWithChildren, RefObject, useContext, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import React, { PropsWithChildren, ReactNode, RefObject, useContext, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import ClickAwayListener from "react-click-away-listener";
 import { createPortal } from "react-dom";
 
@@ -13,18 +13,86 @@ export type TextHighlightProviderProps = {
 }
 
 
+type CommentProps = PropsWithChildren<{
+    id: string;
+    hasHover: boolean;
+    setSelectedStatus: (isSelected: boolean) => void;
+    setHoverStatus: (hasHover: boolean) => void;
+    ref: RefObject<HTMLDivElement | null>;
+}>
+
+type HighlightProps = PropsWithChildren<{
+    commentId: string;
+    isSelected: boolean;
+    hasHover: boolean;
+    setSelectedStatus: (isSelected: boolean) => void;
+    setHoverStatus: (hasHover: boolean) => void;
+    ref: RefObject<HTMLSpanElement | null>;
+}>
+
 type TextHighlightContext = {
     registerHighlight: (element: HTMLSpanElement, comment: HTMLDivElement) => void;
-    gutterRef: RefObject<HTMLElement |null>;
+    gutterRef: RefObject<HTMLElement | null>;
+    requestRecalculatePositions: () => void;
+
+    Comment: (props: CommentProps) => React.ReactNode;
+    Highlight: (props: HighlightProps) => React.ReactNode;
 }
 const TextHighlightContext = React.createContext<TextHighlightContext>({
     registerHighlight: () => {
         throw new Error("registerHighlight not implemented");
     },
+    requestRecalculatePositions: () => {
+        throw new Error("requestRecalculatePositions not implemented")
+    },
+
+
     gutterRef: {
-        current:null
-    }
+        current: null
+    },
+    Comment: DefaultComment,
+    Highlight: DefaultHighlight
 });
+
+
+function DefaultHighlight(props: HighlightProps) {
+
+    const { hasHover, isSelected, ref, setHoverStatus, setSelectedStatus, commentId } = props;
+
+
+    return <span
+        data-testid="rth-highlight"
+        className={`text-highlight${hasHover ? ' text-highlight-hover' : ''}${isSelected ? ' text-highlight-selected' : ''}`}
+        ref={ref}
+        aria-describedby={commentId}
+        onMouseEnter={(() => setHoverStatus(true))}
+        onMouseLeave={(() => setHoverStatus(false))}
+        onClick={() => {
+            setTimeout(() => {
+
+                setSelectedStatus(true);
+            }, 10)
+        }}
+
+    >
+        {props.children}
+    </span>
+}
+
+function DefaultComment(props: CommentProps) {
+
+
+
+    return <div
+        data-testid="rth-comment"
+        className={`text-highlight-comment${props.hasHover ? ' text-highlight-hover' : ''}`}
+        ref={props.ref}
+        onMouseEnter={(() => props.setHoverStatus(true))}
+        onMouseLeave={(() => props.setHoverStatus(false))}
+        id={props.id}>
+        {props.children}
+    </div>
+}
 
 function recalculatePositions(mapOfSpansAndComments: Map<HTMLSpanElement, HTMLDivElement>) {
     const entries = mapOfSpansAndComments.entries();
@@ -83,6 +151,11 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
     const [isReady, setIsReady] = useState(false);
 
 
+    const recalculatePositionsRef = useRef(() => {
+        recalculatePositions(highlightedElementsRef.current);
+    })
+
+
     useEffect(() => {
         setIsReady(true);
 
@@ -123,10 +196,10 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
         <div className="text-highlight-left-gutter"></div>
 
         <div className="text-highlight-content-container" ref={containerRef}>
-            <TextHighlightContext.Provider value={{ registerHighlight, gutterRef }}>
+            <TextHighlightContext.Provider value={{ registerHighlight, gutterRef, Comment: DefaultComment, Highlight: DefaultHighlight, requestRecalculatePositions: recalculatePositionsRef.current }}>
                 {props.children}
             </TextHighlightContext.Provider>
-            
+
         </div>        <div className="text-highlight-right-gutter" ref={gutterRef}>
 
         </div>
@@ -151,7 +224,9 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
 
     const [isReady, setIsReady] = useState(false);
 
-    
+    const { Comment, Highlight } = highlightContext;
+
+
 
     useEffect(() => {
         setIsReady(true);
@@ -167,43 +242,39 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
 
 
 
-    return <><span className={`text-highlight${hasHover ? ' text-highlight-hover' : ''}${isSelected ? ' text-highlight-selected' : ''}`} ref={spanRef}
-        aria-describedby={id}
-        onMouseEnter={(() => setHasHover(true))}
-        onMouseLeave={(() => setHasHover(false))}
-        onClick={() => {
-            setTimeout(() => {
-
-                setIsSelected(true);
-            }, 10)
-        }}
-
-    >
-        {props.children}
-    </span>
+    return <>
 
 
-{highlightContext.gutterRef.current &&
-        createPortal(
-            <ClickAwayListener onClickAway={() => {
-                if (isSelected) {
-                    setIsSelected(false)
-                }
-            }}>
+        <Highlight
+            isSelected={isSelected}
+            hasHover={hasHover}
+            ref={spanRef}
+            commentId={id}
+            setHoverStatus={setHasHover}
+            setSelectedStatus={setIsSelected}
+        >{props.children}</Highlight>
 
-                <div className={`text-highlight-comment-outer${isSelected ? ' text-highlight-selected' : ''}${isReady? '' : 'not-ready'}`}>
-                    <button onClick={() => setIsSelected(false)}>Close </button>
 
-                    <div className={`text-highlight-comment${hasHover ? ' text-highlight-hover' : ''}`} ref={commentRef}
-                        onMouseEnter={(() => setHasHover(true))}
-                        onMouseLeave={(() => setHasHover(false))}
-                        id={id}>
-                        {props.commentContent}
+        {highlightContext.gutterRef.current &&
+            createPortal(
+                <ClickAwayListener onClickAway={() => {
+                    if (isSelected) {
+                        setIsSelected(false)
+                    }
+                }}>
+
+                    <div className={`text-highlight-comment-outer${isSelected ? ' text-highlight-selected' : ''}${isReady ? '' : 'not-ready'}`}>
+                        <button onClick={() => setIsSelected(false)}>Close </button>
+
+
+                        <Comment id={id} setHoverStatus={setHasHover} hasHover={hasHover} ref={commentRef} setSelectedStatus={setIsSelected}>
+                            {props.commentContent}
+                        </Comment>
+
                     </div>
-                </div>
-            </ClickAwayListener>
-            ,
-            highlightContext.gutterRef.current
-        )}
+                </ClickAwayListener>
+                ,
+                highlightContext.gutterRef.current
+            )}
     </>
 }
