@@ -339,12 +339,56 @@ export const Interactive = () => {
 };
 
 
-export const SmallerExampleForScreenReaderTest: Story = {
+export const SmallerExample: Story = {
 	args: {
 		children: <p>
 			Hello I am some <TextHighlight commentContent={<p>
 				I am the comment.
 			</p>}>text</TextHighlight>. Here is some more text, and here is the <TextHighlight commentContent={<p>I am the second comment.</p>}>highlight.</TextHighlight>
 		</p>
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+
+
+		const highlightEls = canvas.getAllByTestId("rth-highlight");
+		expect(highlightEls).toHaveLength(2);
+
+
+		// This has been a good play around with storybook testing. 
+		// Really quite enjoying it 
+		if (window.innerWidth < 800) {
+			const commentEls = canvas.getAllByTestId("rth-comment");
+			expect(commentEls).toHaveLength(2); // but they're not visible
+			commentEls.forEach((v) => {
+				expect(v).not.toBeVisible();
+			})
+
+			await userEvent.click(highlightEls[0]);
+
+
+			await waitFor(() => {
+				expect(commentEls[0]).toBeVisible();
+			});
+
+
+
+			expect(commentEls[0]).toBeVisible();
+			expect(commentEls[1]).not.toBeVisible();
+
+
+		}
+		else {
+			const commentEls = canvas.getAllByTestId("rth-comment");
+			expect(commentEls).toHaveLength(2);
+
+			const firstComment = commentEls[0];
+			expect(firstComment).not.toHaveClass("text-highlight-hover");
+
+
+			await userEvent.hover(highlightEls[0])
+
+			expect(firstComment).toHaveClass("text-highlight-hover");
+		}
 	}
 }
