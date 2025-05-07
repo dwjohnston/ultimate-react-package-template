@@ -42,9 +42,9 @@ jobs:
           path: storybook-static 
           checkout: false 
 
-      # - name: Run Storybook tests
-      #   if: success()
-      #   run: npm run test-storybook -- --no-index-json
-      #   env:
-      #     TARGET_URL: 'https://dwjohnston.github.io/react-text-highlight'
+      - name: Run Storybook tests
+        if: success()
+        run: npm run test-storybook -- --no-index-json
+        env:
+          TARGET_URL: 'https://dwjohnston.github.io/react-text-highlight'
 
