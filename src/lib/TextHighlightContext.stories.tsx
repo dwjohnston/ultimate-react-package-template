@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { expect, userEvent, within } from "@storybook/test";
+import { expect, userEvent, waitFor, within } from "@storybook/test";
 
 import { TextHighlight, TextHighlightProvider } from "./TextHighlightContext";
 import React, { ReactNode, useState } from "react";
@@ -123,7 +123,7 @@ export const Main: Story = {
 				</p>
 				<p>
 					Lorem ipsum dolor sit amet consectetur adipiscing elit.{" "}
-					<TextHighlight commentContent={<div>This is the comment</div>}>
+					<TextHighlight commentContent={<div>This is the final comment</div>}>
 						Quisque faucibus ex sapien vitae pellentesque sem placerat. In id
 						cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed
 						diam urna tempor. Pulvinar vivamus fringilla lacus nec metus
@@ -187,18 +187,42 @@ export const Main: Story = {
 		const highlightEls = canvas.getAllByTestId("rth-highlight");
 		expect(highlightEls).toHaveLength(5);
 
-		const commentEls = canvas.getAllByTestId("rth-comment");
-		expect(commentEls).toHaveLength(5);
 
-		const firstComment = commentEls[0];
-		expect(firstComment).not.toHaveClass("text-highlight-hover");
+		// This has been a good play around with storybook testing. 
+		// Really quite enjoying it 
+		if (window.innerWidth < 800) {
+			const commentEls = canvas.getAllByTestId("rth-comment");
+			expect(commentEls).toHaveLength(5); // but they're not visible
+			commentEls.forEach((v) => {
+				expect(v).not.toBeVisible();
+			})
+
+			await userEvent.click(highlightEls[0]);
+
+
+			await waitFor(() => {
+				expect(commentEls[0]).toBeVisible();
+			});
 
 
 
-		await userEvent.hover(highlightEls[0])
+			expect(commentEls[0]).toBeVisible();
+			expect(commentEls[1]).not.toBeVisible();
 
-		expect(firstComment).toHaveClass("text-highlight-hover");
 
+		}
+		else {
+			const commentEls = canvas.getAllByTestId("rth-comment");
+			expect(commentEls).toHaveLength(5);
+
+			const firstComment = commentEls[0];
+			expect(firstComment).not.toHaveClass("text-highlight-hover");
+
+
+			await userEvent.hover(highlightEls[0])
+
+			expect(firstComment).toHaveClass("text-highlight-hover");
+		}
 	}
 };
 
