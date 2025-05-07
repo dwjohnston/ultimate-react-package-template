@@ -30,6 +30,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps   
+
       #👇 Add Storybook build and deploy to GitHub Pages as a step in the workflow
       - uses: bitovi/github-actions-storybook-to-github-pages@v1.0.3
         with:
@@ -37,3 +41,10 @@ jobs:
           build_command: npm run build-storybook 
           path: storybook-static 
           checkout: false 
+
+      - name: Run Storybook tests
+        if: success()
+        run: npm run test-storybook
+        env:
+          TARGET_URL: 'https://dwjohnston.github.io/react-text-highlight'
+
