@@ -1,0 +1,38 @@
+name: Tests after Netlify Deploy
+
+on:
+  pull_request:
+    branches:
+      - main
+env: 
+  PR_NUMBER: ${{ github.event.number }}
+  BRANCH_NAME: ${{ github.event.pull_request.head.ref }}
+  NETLIFY_SITE_ID: ${{ vars.NETLIFY_SITE_ID }}
+  NETLIFY_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
+
+  UPDATED_AT: ${{ github.event.pull_request.updated_at }}
+  COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
+
+
+jobs:
+  cypress-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright
+        run: npx playwright install --with-deps   
+
+      - name: Storybook tests
+        run: .github/workflows/scripts/run-tests.sh
+
