@@ -91,7 +91,7 @@ type HighlightProps = PropsWithChildren<{
 
 The highlighted span itself will be included in the server side rendering. The comment will not appear until rendering client side. 
 
-The reason for this is because this solution uses portals, which don't have particularly good support for server side rendering (well, actually the problem is that refs don't work very well in SSR). Essentially the issue is that we need access to the element that holds the comments, but with regular use of a ref, the element won't be attached to the ref until second render. (This is the best discussion I could find of this topic: https://stackoverflow.com/a/68659960)
+The reason for this is because this solution uses portals, which don't have particularly good support for server side rendering. Well, actually the problem is more with the ref. Essentially the issue is that we need access to the element that holds the comments, but with regular use of a ref, the element won't be attached to the ref until second render. This is the best discussion I could find of this topic: https://stackoverflow.com/a/68659960
 
 
 
