@@ -1,7 +1,7 @@
 name: Storybook Tests
  
 on: check_run
-  types: completed
+
 
 jobs:
   test:
