@@ -1,6 +1,8 @@
 name: Storybook Tests
  
-on: deployment_status
+on: check_run
+  types: completed
+
 jobs:
   test:
 
