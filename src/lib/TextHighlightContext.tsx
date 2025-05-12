@@ -3,12 +3,9 @@ import React, { PropsWithChildren, ReactNode, RefObject, useContext, useEffect, 
 import ClickAwayListener from "react-click-away-listener";
 import { createPortal } from "react-dom";
 
-export type TextHighlightProviderProps = {
-
-}
 
 
-type CommentProps = PropsWithChildren<{
+export type CommentProps = PropsWithChildren<{
     /**
      * Attach this to the `id` attribute of your main element. 
      * 
@@ -16,6 +13,8 @@ type CommentProps = PropsWithChildren<{
      */
     id: string;
     hasHover: boolean;
+
+    isSelected: boolean;
     /**
      * Attach this to click handlers for your component
      * @param hasHover 
@@ -36,7 +35,7 @@ type CommentProps = PropsWithChildren<{
     ref: RefObject<HTMLDivElement | null>;
 }>
 
-type HighlightProps = PropsWithChildren<{
+export type HighlightProps = PropsWithChildren<{
     /**
      * Attach this to the `id` attribute of your main element. 
      * 
@@ -62,12 +61,20 @@ type HighlightProps = PropsWithChildren<{
 
 type TextHighlightContext = {
     registerHighlight: (element: HTMLSpanElement, comment: HTMLDivElement) => void;
-    gutterRef: RefObject<HTMLElement | null>;
     requestRecalculatePositions: () => void;
 
+    gutterRef: RefObject<HTMLElement | null>;
     Comment: (props: CommentProps) => React.ReactNode;
     Highlight: (props: HighlightProps) => React.ReactNode;
 }
+
+export type TextHighlightProviderProps = PropsWithChildren<{
+    Comment?: TextHighlightContext['Comment'];
+    Highlight?: TextHighlightContext['Highlight'];
+    gutterRef: RefObject<HTMLElement | null>;
+}>;
+
+
 const TextHighlightContext = React.createContext<TextHighlightContext>({
     registerHighlight: () => {
         throw new Error("registerHighlight not implemented");
@@ -169,6 +176,8 @@ function recalculatePositions(mapOfSpansAndComments: Map<HTMLSpanElement, HTMLDi
 
 export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProviderProps>) {
 
+    const { gutterRef, Comment = DefaultComment, Highlight = DefaultHighlight } = props;
+
 
     const highlightedElementsRef = useRef<Map<HTMLSpanElement, HTMLDivElement>>(new Map());
 
@@ -202,7 +211,6 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
 
         const resizeObserver = new ResizeObserver(onResize);
         ([containerRef.current, gutterRef.current]).forEach((v) => {
-            console.log('attach ')
             resizeObserver.observe(v);
         })
 
@@ -213,29 +221,26 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
 
     }, [])
 
-    const gutterRef = useRef<HTMLDivElement>(null);
-
     const registerHighlight = (element: HTMLSpanElement, commentEl: HTMLDivElement) => {
         highlightedElementsRef.current.set(element, commentEl);
         recalculatePositions(highlightedElementsRef.current);
     }
 
 
-    return <div className="text-highlight-provider-outer">
-
-        <div className="text-highlight-left-gutter"></div>
-
-        <div className="text-highlight-content-container" ref={containerRef}>
-            <TextHighlightContext.Provider value={{ registerHighlight, gutterRef, Comment: DefaultComment, Highlight: DefaultHighlight, requestRecalculatePositions: recalculatePositionsRef.current }}>
-                {props.children}
-            </TextHighlightContext.Provider>
-
-        </div>
-        <div className="text-highlight-right-gutter" ref={gutterRef}>
-
-        </div>
+    return <div className="text-highlight-content-container" ref={containerRef}>
+        <TextHighlightContext.Provider value={{ registerHighlight, gutterRef, Comment, Highlight, requestRecalculatePositions: recalculatePositionsRef.current }}>
+            {props.children}
+        </TextHighlightContext.Provider>
 
     </div>
+
+
+}
+
+
+export function useTextHighlight() {
+    const highlightContext = useContext(TextHighlightContext);
+    return highlightContext;
 }
 
 
@@ -298,7 +303,7 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
                         <button onClick={() => setIsSelected(false)}>Close </button>
 
 
-                        <Comment id={id} setHoverStatus={setHasHover} hasHover={hasHover} ref={commentRef} setSelectedStatus={setIsSelected}>
+                        <Comment isSelected={isSelected} id={id} setHoverStatus={setHasHover} hasHover={hasHover} ref={commentRef} setSelectedStatus={setIsSelected}>
                             {props.commentContent}
                         </Comment>
 

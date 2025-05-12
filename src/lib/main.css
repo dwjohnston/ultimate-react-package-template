@@ -24,25 +24,6 @@
 }
 
 
-
-.text-highlight-provider-outer {
-    display: flex;
-    flex-flow: row nowrap;
-}
-
-.text-highlight-content-container {
-    flex: 0 1 800px;
-    max-width: 100%;
-}
-
-.text-highlight-left-gutter,
-.text-highlight-right-gutter {
-    flex: 1 1 auto;
-    display: flex;
-    flex-flow: column nowrap;
-    gap: 2px;
-}
-
 .text-highlight {
     background-color: var(--highlight-bg-color);
     color: var(--highlight-text-color);

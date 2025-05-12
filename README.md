@@ -10,18 +10,48 @@ For mobile view, the comments are not displayed until they highlight is clicked.
 
 ## How to use 
 
-At the top level of your application include the provider. 
+Near the top of your application you will need: 
+
+- A container, with a ref attached, where the comments will be inserted. This container needs to be a column flex box. 
+- The TextHighlightProvider - pass the ref to the comments container to it.
 
 ```jsx
 
-export function App() {
-    <TextHighlightProvider>
-        {/* rest of the application here*/}
-    </TextHighlightProvider>
+function App() {
+	const ref = useRef<HTMLDivElement>(null);
+	return (
+
+		<div style={{
+			display: "flex",
+			flexFlow: "row nowrap",
+		}}>
+			<main
+				style={{
+					flex: "1 1 auto",
+				}}>
+
+				<TextHighlightProvider gutterRef={ref}>
+					{props.children}
+				</TextHighlightProvider >
+
+			</main>
+
+			{/* 👇 This is the important part
+				The container for the comments to sit in, needs to be a column flex box.
+			*/}
+			<div ref={ref} style={{
+				display: "flex",
+				flexFlow: "column nowrap",
+				gap: 4,
+				flex: "0 0 200px",
+			}}></div>
+		</div>
+	);
+
 }
 
-```
 
+```
 
 Now use the highlights anywhere you need: 
 ```jsx
@@ -85,6 +115,25 @@ type HighlightProps = PropsWithChildren<{
     ref: RefObject<HTMLSpanElement | null>;
 }>
 ```
+
+## Requesting repositioning 
+
+By default the comments are repositioned when:
+
+- A highlight is added or removed
+- The highlights container is resized
+- The comments container is resized
+
+It's possible that your application will contain scenarios where additional repositioning is required. 
+
+You can imperatively request repositioning via the hook: 
+
+```
+const highlightContext = useTextHighlight(); 
+highlightContext.requestRecalculatePositions();
+```
+
+
 
 
 ## SSR/RSC support 

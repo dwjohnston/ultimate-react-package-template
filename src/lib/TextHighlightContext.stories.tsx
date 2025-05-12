@@ -1,17 +1,59 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { expect, userEvent, waitFor, within } from "@storybook/test";
 
-import { TextHighlight, TextHighlightProvider } from "./TextHighlightContext";
-import React, { ReactNode, useState } from "react";
+import { CommentProps, HighlightProps, TextHighlight, TextHighlightProvider, TextHighlightProviderProps } from "./TextHighlightContext";
+import React, { PropsWithChildren, ReactNode, useRef, useState } from "react";
+
+function Demo(props: PropsWithChildren<{
+	Highlight?: TextHighlightProviderProps["Highlight"];
+	Comment?: TextHighlightProviderProps["Comment"];
+
+}>) {
+	const ref = useRef<HTMLDivElement>(null);
+	return (
+
+		<div style={{
+			display: "flex",
+			flexFlow: "row nowrap",
+		}}>
+			<main
+				style={{
+					flex: "1 1 auto",
+				}}>
+				<TextHighlightProvider gutterRef={ref} Highlight={props.Highlight} Comment={props.Comment}>
+
+					{props.children}
+				</TextHighlightProvider >
+
+			</main>
+
+			{/* 👇 This is the important part
+				The container for the comments to sit in, needs to be a column flex box.
+			*/}
+			<div ref={ref} style={{
+				display: "flex",
+				flexFlow: "column nowrap",
+				gap: 4,
+				flex: "0 0 200px",
+			}}></div>
+		</div>
+	);
+
+}
+
+
+
 
 const meta = {
-	title: "Example/TextHighlightContext",
-	component: TextHighlightProvider,
+	title: "TextHighlight",
+	component: Demo,
+
+
 	parameters: {
 		// More on how to position stories at: https://storybook.js.org/docs/configure/story-layout
 		layout: "fullscreen",
 	},
-} satisfies Meta<typeof TextHighlightProvider>;
+} satisfies Meta<typeof Demo>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -328,27 +370,160 @@ function Block() {
 
 export const Interactive = () => {
 	const [paragraphs, setParagraphs] = React.useState<number>(0);
-	return (
-		<TextHighlightProvider>
-			<div>
-				<button
-					onClick={() => {
-						setParagraphs((prev) => prev + 1);
-					}}
-				>
-					Add paragraph
-				</button>
-			</div>
-			{new Array(paragraphs).fill(true).map((v, i) => {
-				return <Block key={i} />;
-			})}
-		</TextHighlightProvider>
-	);
-};
+	const ref = useRef<HTMLDivElement>(null);
 
+	return <div style={{
+		display: "flex",
+		flexFlow: "row nowrap",
+	}}>
+		<main
+			style={{
+				flex: "1 1 auto",
+			}}>
+			<p>
+				The purpose of this story is to demonstrate that when content is added and removed the comments still behave nicely
+			</p>
+			<TextHighlightProvider gutterRef={ref}>
+
+				<div>
+					<button
+						onClick={() => {
+							setParagraphs((prev) => prev + 1);
+						}}
+					>
+						Add paragraph
+					</button>
+				</div>
+				{new Array(paragraphs).fill(true).map((v, i) => {
+					return <Block key={i} />;
+				})}
+			</TextHighlightProvider >
+
+		</main>
+
+		<div ref={ref} style={{
+			display: "flex",
+			flexFlow: "column nowrap",
+			gap: 4,
+			flex: "0 0 200px",
+		}}></div>
+	</div>
+
+}
 
 export const SmallerExample: Story = {
 	args: {
+		children: <p>
+			Hello I am some <TextHighlight commentContent={<p>
+				I am the comment.
+			</p>}>text</TextHighlight>. Here is some more text, and here is the <TextHighlight commentContent={<p>I am the second comment.</p>}>highlight.</TextHighlight>
+		</p>
+	},
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+
+
+		const highlightEls = canvas.getAllByTestId("rth-highlight");
+		expect(highlightEls).toHaveLength(2);
+		await waitFor(() => {
+			expect(canvas.getAllByTestId("rth-comment")).toHaveLength(2);
+		});
+
+		// This has been a good play around with storybook testing. 
+		// Really quite enjoying it 
+		if (window.innerWidth < 800) {
+			const commentEls = canvas.getAllByTestId("rth-comment");
+			expect(commentEls).toHaveLength(2); // but they're not visible
+			commentEls.forEach((v) => {
+				expect(v).not.toBeVisible();
+			})
+
+			await userEvent.click(highlightEls[0]);
+
+
+			await waitFor(() => {
+				expect(commentEls[0]).toBeVisible();
+			});
+
+
+
+			expect(commentEls[0]).toBeVisible();
+			expect(commentEls[1]).not.toBeVisible();
+
+
+		}
+		else {
+			const commentEls = canvas.getAllByTestId("rth-comment");
+			expect(commentEls).toHaveLength(2);
+
+			const firstComment = commentEls[0];
+			expect(firstComment).not.toHaveClass("text-highlight-hover");
+
+
+			await userEvent.hover(highlightEls[0])
+
+			expect(firstComment).toHaveClass("text-highlight-hover");
+		}
+	}
+}
+
+function CustomHighlight(props: HighlightProps) {
+	const {
+		commentId,
+		children,
+		isSelected,
+		hasHover,
+		setSelectedStatus,
+		setHoverStatus,
+		ref } = props;
+	return <span
+		id={commentId}
+		onClick={() => setSelectedStatus(true)}
+		onMouseEnter={() => setHoverStatus(true)}
+		onMouseLeave={() => setHoverStatus(false)}
+		style={{
+			border: "solid 1px red",
+			backgroundColor: hasHover ? "yellow" : "transparent",
+			fontWeight: isSelected ? "bold" : "normal",
+
+
+		}}
+		ref={ref}>
+		{children}
+	</span>
+}
+
+function CustomComment(props: CommentProps) {
+	const {
+		id,
+		children,
+		isSelected,
+		hasHover,
+		setSelectedStatus,
+		setHoverStatus,
+		ref } = props;
+	return <span
+		id={id}
+		onClick={() => setSelectedStatus(true)}
+		onMouseEnter={() => setHoverStatus(true)}
+		onMouseLeave={() => setHoverStatus(false)}
+		style={{
+			border: "solid 1px red",
+			backgroundColor: hasHover ? "yellow" : "transparent",
+			fontWeight: isSelected ? "bold" : "normal",
+
+
+		}}
+		ref={ref}>
+		{children}
+	</span>
+}
+
+
+export const WithCustomComponents: Story = {
+	args: {
+		Highlight: CustomHighlight,
+		Comment: CustomComment,
 		children: <p>
 			Hello I am some <TextHighlight commentContent={<p>
 				I am the comment.
