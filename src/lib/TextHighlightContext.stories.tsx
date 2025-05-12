@@ -193,7 +193,7 @@ export const Main: Story = {
 		// For some reason on local dev this doesn't matter, but 
 		// For production it does? I don't know
 		await waitFor(() => {
-			expect(canvas.getAllByTestId("rth-comment2")).toHaveLength(5);
+			expect(canvas.getAllByTestId("rth-comment")).toHaveLength(5);
 		});
 
 		// This has been a good play around with storybook testing. 
