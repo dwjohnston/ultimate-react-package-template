@@ -10,6 +10,7 @@ function Demo(props: PropsWithChildren<{
 
 }>) {
 	const ref = useRef<HTMLDivElement>(null);
+	const toastContainerRef = useRef<HTMLDivElement>(null);
 	return (
 
 		<div style={{
@@ -17,10 +18,11 @@ function Demo(props: PropsWithChildren<{
 			flexFlow: "row nowrap",
 		}}>
 			<main
+				ref={toastContainerRef}
 				style={{
 					flex: "1 1 auto",
 				}}>
-				<TextHighlightProvider gutterRef={ref} Highlight={props.Highlight} Comment={props.Comment}>
+				<TextHighlightProvider gutterRef={ref} toastContainerRef={toastContainerRef} Highlight={props.Highlight} Comment={props.Comment}>
 
 					{props.children}
 				</TextHighlightProvider >
@@ -31,10 +33,11 @@ function Demo(props: PropsWithChildren<{
 				The container for the comments to sit in, needs to be a column flex box.
 			*/}
 			<div ref={ref}
-				className="text-highlight-right-gutter"
+				className="right-gutter"
 				style={{
 					display: "flex",
-					flexFlow: "column nowrap",
+					flexDirection: "column",
+					flexWrap: "nowrap",
 					gap: 4,
 					flex: "0 0 200px",
 				}}></div>
@@ -468,6 +471,64 @@ export const SmallerExample: Story = {
 		}
 	}
 }
+
+export const SingleHighlight: Story = {
+	args: {
+		children: <div>
+			<p>
+				Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+				faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
+				pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
+				tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
+				Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
+				hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
+				per conubia nostra inceptos himenaeos.
+			</p>
+			<p>
+				Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+				faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
+				pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
+				tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
+				Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
+				hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
+				per conubia nostra inceptos himenaeos.
+			</p>
+			<p>
+				Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+				faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
+				pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
+				tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
+				Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
+				hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
+				per conubia nostra inceptos himenaeos.
+			</p>
+
+			<p>	Hello I am some <TextHighlight commentContent={<p>
+				I am the comment.
+			</p>}>text</TextHighlight>. Here is some more text.
+			</p>
+			<p>
+				Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+				faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
+				pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
+				tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
+				Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
+				hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
+				per conubia nostra inceptos himenaeos.
+			</p>
+			<p>
+				Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+				faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
+				pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
+				tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
+				Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
+				hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
+				per conubia nostra inceptos himenaeos.
+			</p>
+		</div>
+	}
+}
+
 
 function CustomHighlight(props: HighlightProps) {
 	const {

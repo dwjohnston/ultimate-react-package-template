@@ -2,6 +2,7 @@
 import React, { PropsWithChildren, ReactNode, RefObject, useContext, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import ClickAwayListener from "react-click-away-listener";
 import { createPortal } from "react-dom";
+import { useMediaQuery } from "react-responsive";
 
 
 
@@ -33,6 +34,12 @@ export type CommentProps = PropsWithChildren<{
      * 
      */
     ref: RefObject<HTMLDivElement | null>;
+
+    /**
+     * You might want to display you content differently when the content is in a mobile toast
+     * If need be, this prop can be used to determine that
+     */
+    isInMobileToast: boolean;
 }>
 
 export type HighlightProps = PropsWithChildren<{
@@ -59,22 +66,34 @@ export type HighlightProps = PropsWithChildren<{
     ref: RefObject<HTMLSpanElement | null>;
 }>
 
+
+export type MobileToastProps = PropsWithChildren<{
+    onClose: () => void;
+}>;
+
 type TextHighlightContext = {
     registerHighlight: (element: HTMLSpanElement, comment: HTMLDivElement) => void;
     requestRecalculatePositions: () => void;
 
     gutterRef: RefObject<HTMLElement | null>;
+    toastContainerRef: RefObject<HTMLElement | null>;
     Comment: (props: CommentProps) => React.ReactNode;
     Highlight: (props: HighlightProps) => React.ReactNode;
+    MobileToast: (props: MobileToastProps) => React.ReactNode;
+    mediaQuery: Parameters<typeof useMediaQuery>[0]['query'];
 }
 
 export type TextHighlightProviderProps = PropsWithChildren<{
     Comment?: TextHighlightContext['Comment'];
     Highlight?: TextHighlightContext['Highlight'];
+    MobileToast?: TextHighlightContext['MobileToast'];
     gutterRef: RefObject<HTMLElement | null>;
+    toastContainerRef: RefObject<HTMLElement | null>;
+    mediaQuery?: TextHighlightContext['mediaQuery'];
 }>;
 
 
+const DEFAULT_MEDIA_QUERY = '(max-width: 600px)';
 const TextHighlightContext = React.createContext<TextHighlightContext>({
     registerHighlight: () => {
         throw new Error("registerHighlight not implemented");
@@ -87,10 +106,26 @@ const TextHighlightContext = React.createContext<TextHighlightContext>({
     gutterRef: {
         current: null
     },
+    toastContainerRef: {
+        current: null
+    },
     Comment: DefaultComment,
-    Highlight: DefaultHighlight
+    Highlight: DefaultHighlight,
+    MobileToast: DefaultMobileToast,
+    mediaQuery: DEFAULT_MEDIA_QUERY
 });
 
+
+function DefaultMobileToast(props: MobileToastProps) {
+    return <div className="text-highlight-mobile-toast">
+        <button onClick={props.onClose}>
+            Close
+        </button>
+        <div className="text-highlight-mobile-toast-content">
+            {props.children}
+        </div>
+    </div>
+}
 
 function DefaultHighlight(props: HighlightProps) {
 
@@ -105,8 +140,8 @@ function DefaultHighlight(props: HighlightProps) {
         onMouseEnter={(() => setHoverStatus(true))}
         onMouseLeave={(() => setHoverStatus(false))}
         onClick={() => {
+            // We don't want it to immediately trigger the click away listener
             setTimeout(() => {
-
                 setSelectedStatus(true);
             }, 10)
         }}
@@ -122,10 +157,11 @@ function DefaultComment(props: CommentProps) {
 
     return <div
         data-testid="rth-comment"
-        className={`text-highlight-comment${props.hasHover ? ' text-highlight-hover' : ''}`}
+        className={`text-highlight-comment${props.hasHover ? ' text-highlight-hover' : ''}${props.isSelected ? ' text-highlight-selected' : ''}${props.isInMobileToast ? ' is-in-mobile-toast' : ''}`}
         ref={props.ref}
         onMouseEnter={(() => props.setHoverStatus(true))}
         onMouseLeave={(() => props.setHoverStatus(false))}
+        onClick={() => props.setSelectedStatus(true)}
         id={props.id}>
         {props.children}
     </div>
@@ -133,6 +169,7 @@ function DefaultComment(props: CommentProps) {
 
 function recalculatePositions(mapOfSpansAndComments: Map<HTMLSpanElement, HTMLDivElement>) {
     const entries = mapOfSpansAndComments.entries();
+
 
 
     // Sort the highlights so they go top to bottom, left to right
@@ -155,7 +192,6 @@ function recalculatePositions(mapOfSpansAndComments: Map<HTMLSpanElement, HTMLDi
 
     });
 
-
     let accumulatedOffset = 0;
     entriesArray.forEach(([span, comment]) => {
 
@@ -176,7 +212,7 @@ function recalculatePositions(mapOfSpansAndComments: Map<HTMLSpanElement, HTMLDi
 
 export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProviderProps>) {
 
-    const { gutterRef, Comment = DefaultComment, Highlight = DefaultHighlight } = props;
+    const { gutterRef, toastContainerRef, Comment = DefaultComment, Highlight = DefaultHighlight, MobileToast = DefaultMobileToast, mediaQuery = DEFAULT_MEDIA_QUERY } = props;
 
 
     const highlightedElementsRef = useRef<Map<HTMLSpanElement, HTMLDivElement>>(new Map());
@@ -206,6 +242,7 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
 
 
         const onResize = () => {
+            console.log("Resizing");
             recalculatePositions(highlightedElementsRef.current);
         }
 
@@ -228,7 +265,7 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
 
 
     return <div className="text-highlight-content-container" ref={containerRef}>
-        <TextHighlightContext.Provider value={{ registerHighlight, gutterRef, Comment, Highlight, requestRecalculatePositions: recalculatePositionsRef.current }}>
+        <TextHighlightContext.Provider value={{ toastContainerRef, registerHighlight, gutterRef, Comment, Highlight, MobileToast, requestRecalculatePositions: recalculatePositionsRef.current, mediaQuery }}>
             {props.children}
         </TextHighlightContext.Provider>
 
@@ -260,7 +297,11 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
 
     const [isReady, setIsReady] = useState(false);
 
-    const { Comment, Highlight } = highlightContext;
+    const { Comment, Highlight, MobileToast } = highlightContext;
+
+    const isMobile = useMediaQuery({
+        query: highlightContext.mediaQuery
+    })
 
 
 
@@ -268,14 +309,25 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
         setIsReady(true);
 
         if (spanRef.current && commentRef.current) {
-
             highlightContext.registerHighlight(spanRef.current, commentRef.current)
         }
-
-
-
     }, [isReady]);
 
+
+    const comment = <Comment
+        isInMobileToast={isMobile}
+        isSelected={isSelected}
+        id={id}
+        setHoverStatus={setHasHover}
+        hasHover={hasHover}
+        ref={commentRef}
+        setSelectedStatus={(value) => {
+            setTimeout(() => {
+                setIsSelected(value)
+            }, 10)
+        }}>
+        {props.commentContent}
+    </Comment>;
 
 
     return <>
@@ -293,24 +345,51 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
 
         {highlightContext.gutterRef.current &&
             createPortal(
-                <ClickAwayListener onClickAway={() => {
-                    if (isSelected) {
-                        setIsSelected(false)
+
+                <>
+                    <ClickAwayListener onClickAway={() => {
+                        if (isSelected) {
+                            setIsSelected(false)
+                        }
+                    }}>
+                        <div data-testid="rth-flexing-child" style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: "flex-end",
+                            visibility: isMobile ? 'hidden' : 'visible',
+                        }}>
+                            {comment}
+
+
+                        </div>
+
+
+
+                    </ClickAwayListener >
+
+                    {isMobile && isSelected && <MobileToast onClose={() => {
+                        setIsSelected(false);
                     }
-                }}>
+                    }>
+                        {comment}
+                    </MobileToast>}
+                </>
 
-                    <div className={`text-highlight-comment-outer${isSelected ? ' text-highlight-selected' : ''}${isReady ? '' : 'not-ready'}`}>
-                        <button onClick={() => setIsSelected(false)}>Close </button>
-
-
-                        <Comment isSelected={isSelected} id={id} setHoverStatus={setHasHover} hasHover={hasHover} ref={commentRef} setSelectedStatus={setIsSelected}>
-                            {props.commentContent}
-                        </Comment>
-
-                    </div>
-                </ClickAwayListener>
                 ,
                 highlightContext.gutterRef.current
-            )}
+            )
+        }
+        {isMobile && isSelected && highlightContext.toastContainerRef.current &&
+            createPortal(
+                < MobileToast onClose={() => {
+                    setIsSelected(false);
+                }
+                }>
+                    {comment}
+                </MobileToast >
+                ,
+                highlightContext.toastContainerRef.current
+            )
+        }
     </>
 }
