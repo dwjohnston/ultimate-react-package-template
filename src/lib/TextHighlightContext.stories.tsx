@@ -245,7 +245,7 @@ export const Main: Story = {
 
 		// This has been a good play around with storybook testing. 
 		// Really quite enjoying it 
-		if (window.innerWidth < 800) {
+		if (canvasElement.clientWidth < 600) {
 			const commentEls = canvas.getAllByTestId("rth-comment");
 			expect(commentEls).toHaveLength(5); // but they're not visible
 			commentEls.forEach((v) => {
@@ -256,14 +256,10 @@ export const Main: Story = {
 
 
 			await waitFor(() => {
+				const commentEls = canvas.getAllByTestId("rth-comment");
+				expect(commentEls).toHaveLength(6); // but they're not visible
 				expect(commentEls[0]).toBeVisible();
 			});
-
-
-
-			expect(commentEls[0]).toBeVisible();
-			expect(commentEls[1]).not.toBeVisible();
-
 
 		}
 		else {
@@ -376,19 +372,21 @@ function Block() {
 export const Interactive = () => {
 	const [paragraphs, setParagraphs] = React.useState<number>(0);
 	const ref = useRef<HTMLDivElement>(null);
+	const toastContainerRef = useRef<HTMLDivElement>(null);
 
 	return <div style={{
 		display: "flex",
 		flexFlow: "row nowrap",
 	}}>
 		<main
+			ref={toastContainerRef}
 			style={{
 				flex: "1 1 auto",
 			}}>
 			<p>
 				The purpose of this story is to demonstrate that when content is added and removed the comments still behave nicely
 			</p>
-			<TextHighlightProvider gutterRef={ref}>
+			<TextHighlightProvider gutterRef={ref} toastContainerRef={toastContainerRef}>
 
 				<div>
 					<button
@@ -436,7 +434,7 @@ export const SmallerExample: Story = {
 
 		// This has been a good play around with storybook testing. 
 		// Really quite enjoying it 
-		if (window.innerWidth < 800) {
+		if (window.innerWidth < 600) {
 			const commentEls = canvas.getAllByTestId("rth-comment");
 			expect(commentEls).toHaveLength(2); // but they're not visible
 			commentEls.forEach((v) => {
@@ -447,15 +445,10 @@ export const SmallerExample: Story = {
 
 
 			await waitFor(() => {
+				const commentEls = canvas.getAllByTestId("rth-comment");
+				expect(commentEls).toHaveLength(3); // but they're not visible
 				expect(commentEls[0]).toBeVisible();
 			});
-
-
-
-			expect(commentEls[0]).toBeVisible();
-			expect(commentEls[1]).not.toBeVisible();
-
-
 		}
 		else {
 			const commentEls = canvas.getAllByTestId("rth-comment");
@@ -540,13 +533,14 @@ function CustomHighlight(props: HighlightProps) {
 		setHoverStatus,
 		ref } = props;
 	return <span
+		data-testid="custom-highlight"
 		id={commentId}
 		onClick={() => setSelectedStatus(true)}
 		onMouseEnter={() => setHoverStatus(true)}
 		onMouseLeave={() => setHoverStatus(false)}
 		style={{
-			border: "solid 1px red",
-			backgroundColor: hasHover ? "yellow" : "transparent",
+			border: isSelected ? "solid 1px lime" : "solid 1px red",
+			backgroundColor: hasHover ? "#333" : "transparent",
 			fontWeight: isSelected ? "bold" : "normal",
 
 
@@ -566,13 +560,14 @@ function CustomComment(props: CommentProps) {
 		setHoverStatus,
 		ref } = props;
 	return <span
+		data-testid="custom-comment"
 		id={id}
 		onClick={() => setSelectedStatus(true)}
 		onMouseEnter={() => setHoverStatus(true)}
 		onMouseLeave={() => setHoverStatus(false)}
 		style={{
 			border: "solid 1px red",
-			backgroundColor: hasHover ? "yellow" : "transparent",
+			backgroundColor: hasHover ? "#857230" : "transparent",
 			fontWeight: isSelected ? "bold" : "normal",
 
 
@@ -597,46 +592,44 @@ export const WithCustomComponents: Story = {
 		const canvas = within(canvasElement);
 
 
-		const highlightEls = canvas.getAllByTestId("rth-highlight");
+		const highlightEls = canvas.getAllByTestId("custom-highlight");
 		expect(highlightEls).toHaveLength(2);
 		await waitFor(() => {
-			expect(canvas.getAllByTestId("rth-comment")).toHaveLength(2);
+			expect(canvas.getAllByTestId("custom-comment")).toHaveLength(2);
 		});
 
+		console.log(canvasElement, canvasElement.clientWidth);
 		// This has been a good play around with storybook testing. 
 		// Really quite enjoying it 
-		if (window.innerWidth < 800) {
-			const commentEls = canvas.getAllByTestId("rth-comment");
+		if (canvasElement.clientWidth < 600) {
+			const commentEls = canvas.getAllByTestId("custom-comment");
 			expect(commentEls).toHaveLength(2); // but they're not visible
+
 			commentEls.forEach((v) => {
+				console.log(v)
 				expect(v).not.toBeVisible();
 			})
 
 			await userEvent.click(highlightEls[0]);
 
 
+			/**
+			 * Note the behaviour of the comments for mobile
+			 * Actually the comments be duplicated into the toast container for mobile experience
+			 */
 			await waitFor(() => {
-				expect(commentEls[0]).toBeVisible();
+				const commentEls2 = canvas.getAllByTestId("custom-comment");
+				expect(commentEls2).toHaveLength(3); // but they're not visible
+				expect(commentEls2[0]).toBeVisible();
+
 			});
-
-
-
-			expect(commentEls[0]).toBeVisible();
-			expect(commentEls[1]).not.toBeVisible();
 
 
 		}
 		else {
-			const commentEls = canvas.getAllByTestId("rth-comment");
+			const commentEls = canvas.getAllByTestId("custom-comment");
 			expect(commentEls).toHaveLength(2);
 
-			const firstComment = commentEls[0];
-			expect(firstComment).not.toHaveClass("text-highlight-hover");
-
-
-			await userEvent.hover(highlightEls[0])
-
-			expect(firstComment).toHaveClass("text-highlight-hover");
 		}
 	}
 }

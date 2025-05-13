@@ -140,10 +140,8 @@ function DefaultHighlight(props: HighlightProps) {
         onMouseEnter={(() => setHoverStatus(true))}
         onMouseLeave={(() => setHoverStatus(false))}
         onClick={() => {
-            // We don't want it to immediately trigger the click away listener
-            setTimeout(() => {
-                setSelectedStatus(true);
-            }, 10)
+            setSelectedStatus(true);
+
         }}
 
     >
@@ -339,11 +337,17 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
             ref={spanRef}
             commentId={id}
             setHoverStatus={setHasHover}
-            setSelectedStatus={setIsSelected}
-        >{props.children}</Highlight>
+            setSelectedStatus={(value) => {
+                setTimeout(() => {
+                    setIsSelected(value)
+                }, 10)
+            }}
+
+        >{props.children}</Highlight >
 
 
-        {highlightContext.gutterRef.current &&
+        {
+            highlightContext.gutterRef.current &&
             createPortal(
 
                 <>
@@ -366,27 +370,27 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
 
 
                     </ClickAwayListener >
-
-                    {isMobile && isSelected && <MobileToast onClose={() => {
-                        setIsSelected(false);
-                    }
-                    }>
-                        {comment}
-                    </MobileToast>}
                 </>
 
                 ,
                 highlightContext.gutterRef.current
             )
         }
-        {isMobile && isSelected && highlightContext.toastContainerRef.current &&
+        {
+            isMobile && isSelected && highlightContext.toastContainerRef.current &&
             createPortal(
-                < MobileToast onClose={() => {
-                    setIsSelected(false);
-                }
-                }>
-                    {comment}
-                </MobileToast >
+                <ClickAwayListener onClickAway={() => {
+                    if (isSelected) {
+                        setIsSelected(false)
+                    }
+                }}>
+                    < MobileToast onClose={() => {
+                        setIsSelected(false);
+                    }
+                    }>
+                        {comment}
+                    </MobileToast >
+                </ClickAwayListener>
                 ,
                 highlightContext.toastContainerRef.current
             )
