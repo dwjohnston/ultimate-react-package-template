@@ -30,12 +30,14 @@ function Demo(props: PropsWithChildren<{
 			{/* 👇 This is the important part
 				The container for the comments to sit in, needs to be a column flex box.
 			*/}
-			<div ref={ref} style={{
-				display: "flex",
-				flexFlow: "column nowrap",
-				gap: 4,
-				flex: "0 0 200px",
-			}}></div>
+			<div ref={ref}
+				className="text-highlight-right-gutter"
+				style={{
+					display: "flex",
+					flexFlow: "column nowrap",
+					gap: 4,
+					flex: "0 0 200px",
+				}}></div>
 		</div>
 	);
 
