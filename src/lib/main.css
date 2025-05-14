@@ -10,6 +10,23 @@
     --highlight-comment-bg: #f6e69c;
 }
 
+.right-gutter {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    flex: 0 0 200px;
+
+    @media screen and (max-width: 600px) {
+
+        display: block;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+    }
+}
+
 @media (prefers-color-scheme: dark) {
     :root {
 
@@ -17,31 +34,13 @@
         --highlight-text-color: #fff;
         --highlight-bg-color-hover: #4a4b80;
         --highlight-border-hover: #5b5f99;
-        --highlight-border-selected: #004a88;
+        --highlight-border-selected: #9178e2;
+
         --highlight-comment-box-shadow: rgba(0, 0, 0, 0.2);
         --highlight-comment-bg: #223253;
     }
 }
 
-
-
-.text-highlight-provider-outer {
-    display: flex;
-    flex-flow: row nowrap;
-}
-
-.text-highlight-content-container {
-    flex: 0 1 800px;
-    max-width: 100%;
-}
-
-.text-highlight-left-gutter,
-.text-highlight-right-gutter {
-    flex: 1 1 auto;
-    display: flex;
-    flex-flow: column nowrap;
-    gap: 2px;
-}
 
 .text-highlight {
     background-color: var(--highlight-bg-color);
@@ -49,136 +48,103 @@
     border: solid 1px transparent;
 }
 
-.text-highlight-comment-outer {
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: flex-end;
-    font-size: 0.75em;
-
-    border: solid 1px transparent;
-    margin: 0 4px;
-
-}
-
 .text-highlight-comment {
     background-color: var(--highlight-comment-bg);
     color: var(--highlight-text-color);
     box-sizing: border-box;
 
-    margin-left: 0.4em;
+    margin: 2px;
     padding: 1em;
     font-size: 0.75em;
     max-width: 200px;
     border: solid 1px transparent;
 
-    &.not-ready {
-        display: none;
+
+
+    @media screen and (max-width: 600px) {
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        padding: 1em;
+        /* display: none; */
+
+        &.text-highlight-selected {
+            display: block;
+
+            /*Got help from this video: https://www.youtube.com/watch?v=vmDEHAzj2XE */
+            transition-property: display;
+            transition-duration: 1s;
+            transition-behavior: allow-discrete;
+            animation: 0.1s ease-out 0s 1 slideInFromBottom;
+
+        }
+
+        &:not(.text-highlight-selected) {
+            animation: 0.1s ease-out 0s 1 slideOutToBottom;
+            display: none;
+            transition-property: display;
+            transition-duration: 0.1s;
+            transition-behavior: allow-discrete;
+        }
+
     }
 }
 
 
-
-/**
-    Sorry for the confusion here. 
-
-    Basically
-
-    .text-highlight-hover is applied to both .text-highlight and .text-highlight-comment
-
-    .text-highlight-selected is applied to .text-highlight and .text-highlight-comment-outer, so we need to select with > 
-
-    The reason for this is to do with the behaviour of the comments/comments outer in mobile view.
-*/
-.text-highlight.text-highlight-hover,
-.text-highlight.text-highlight-selected,
-.text-highlight-selected>.text-highlight-comment,
-.text-highlight-comment.text-highlight-hover {
-
+.text-highlight-hover {
     border-color: var(--highlight-border-hover);
     box-shadow: 1px 1px 2px var(--highlight-comment-box-shadow);
     transition: box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    cursor: pointer;
 }
 
-
-
-.text-highlight-selected.text-highlight,
-.text-highlight-selected>.text-highlight-comment {
+.text-highlight-selected {
     border: solid 1px var(--highlight-border-selected);
 }
 
-.text-highlight-comment-outer>button {
-    display: none;
+
+
+@keyframes slideInFromBottom {
+    0% {
+        transform: translateY(100%);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
 }
 
-@media screen and (max-width: 800px) {
-
-    .text-highlight-comment-outer {
-        background-color: var(--highlight-comment-bg);
-
+@keyframes slideOutToBottom {
+    0% {
+        transform: translateY(0);
     }
 
-    .text-highlight-comment-outer>button {
+    100% {
+        transform: translateY(100%);
+    }
+}
+
+
+.text-highlight-comment>button.rth-close-button {
+    display: none;
+    margin: 2px 2px 0 auto;
+
+    background: none;
+    background-color: var(--highlight-comment-bg);
+    border: 1px solid var(--highlight-border-hover);
+    border-radius: 4px;
+    /* fully rounded edges */
+    padding: 0.5em 1em;
+    color: var(--highlight-text-color);
+    font: inherit;
+    font-size: 0.75em;
+    cursor: pointer;
+    outline: none;
+    transition: background 0.2s, color 0.2s;
+
+
+    @media screen and (max-width: 600px) {
         display: block;
-        margin: 2px 2px 0 auto;
-
-        background: none;
-        background-color: var(--highlight-comment-bg);
-        border: 1px solid var(--highlight-border-hover);
-        border-radius: 4px;
-        /* fully rounded edges */
-        padding: 0.5em 1em;
-        color: var(--highlight-text-color);
-        font: inherit;
-        cursor: pointer;
-        outline: none;
-        transition: background 0.2s, color 0.2s;
-
-
-    }
-
-    .text-highlight-comment {
-        max-width: unset;
-        font-size: unset;
-        margin: 0;
-        padding: 0.5em 0.5em 2em;
-
-    }
-
-    .text-highlight-left-gutter,
-    .text-highlight-right-gutter {
-
-        >* {
-            transform: translateY(100%);
-            opacity: 0;
-            position: fixed;
-            display: block;
-            bottom: 0;
-            left: 0;
-            right: 0;
-
-            /* Animate transform and opacity */
-            transition:
-                transform 0.1s ease-out,
-                opacity 0.1s ease-out;
-        }
-
-        >*.text-highlight-selected {
-            transform: translateY(0);
-            opacity: 1;
-
-            box-shadow: 0 -2px 2px var(--highlight-comment-box-shadow);
-
-            .text-highlight-comment {
-                border: none;
-                box-shadow: none;
-                ;
-
-            }
-        }
-
-        >*:not(.text-highlight-selected) {
-            opacity: 0;
-        }
     }
 
 

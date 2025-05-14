@@ -10,18 +10,58 @@ For mobile view, the comments are not displayed until they highlight is clicked.
 
 ## How to use 
 
-At the top level of your application include the provider. 
+Near the top of your application you will need: 
+
+- A gutter container, with a ref attached, where the comments will be inserted.
+   - This container needs to be a column flexbox for desktop views
+   - Do not use the `gap` property as the position calculations will not detect them. If you need spacing, add margin to your comment components
+   - For mobile, if you want the comments to display on click as a toast, implementation is up to you, in my implementation it is a position:fixed set at the bottom of the screen.
+
+- The TextHighlightProvider - pass the ref to the comments container to it.
+
 
 ```jsx
 
-export function App() {
-    <TextHighlightProvider>
-        {/* rest of the application here*/}
-    </TextHighlightProvider>
+function App() {
+	const ref = useRef<HTMLDivElement>(null);
+	const toastContainerRef = useRef<HTMLDivElement>(null);
+	return (
+
+		<div style={{
+			display: "flex",
+			flexFlow: "row nowrap",
+		}}>
+			<main
+				style={{
+					flex: "1 1 auto",
+				}}>
+
+				<TextHighlightProvider gutterRef={ref}>
+					{props.children}
+				</TextHighlightProvider >
+				<div
+					ref={toastContainerRef}
+				>
+
+				</div>
+
+			</main>
+
+			{/* 👇 This is the important part
+				The container for the comments to sit in, needs to be a column flex box.
+			*/}
+			<div ref={ref} style={{
+				display: "flex",
+				flexFlow: "column nowrap",
+				flex: "0 0 200px",
+			}}></div>
+		</div>
+	);
+
 }
 
-```
 
+```
 
 Now use the highlights anywhere you need: 
 ```jsx
@@ -68,23 +108,80 @@ You can provide your own components by passing them into the context provider:
 These are the requisite typings: 
 
 ```typescript
-type CommentProps = PropsWithChildren<{
+export type CommentProps = PropsWithChildren<{
+    /**
+     * Attach this to the `id` attribute of your main element. 
+     * 
+     * This for a11y purposes so the highlight can be linked with the comment.
+     */
     id: string;
     hasHover: boolean;
+
+    isSelected: boolean;
+    /**
+     * Attach this to click handlers for your component
+     * @param hasHover 
+     * @returns 
+     */
     setSelectedStatus: (isSelected: boolean) => void;
+    /**
+     * Attach this to onMouseEnter and onMouseLeave event handlers
+     * @param hasHover 
+     * @returns 
+     */
     setHoverStatus: (hasHover: boolean) => void;
+
+    /**
+     * This ref needs to be attached to the main element 
+     * 
+     */
     ref: RefObject<HTMLDivElement | null>;
+
 }>
 
-type HighlightProps = PropsWithChildren<{
+export type HighlightProps = PropsWithChildren<{
+    /**
+     * Attach this to the `id` attribute of your main element. 
+     * 
+     * This for a11y purposes so the highlight can be linked with the comment.
+     */
     commentId: string;
     isSelected: boolean;
     hasHover: boolean;
     setSelectedStatus: (isSelected: boolean) => void;
+    /**
+     * Attach this to onMouseEnter and onMouseLeave event handlers
+     * @param hasHover 
+     * @returns 
+     */
     setHoverStatus: (hasHover: boolean) => void;
+
+    /**
+     * This ref needs to be attached to the main element 
+     * 
+     */
     ref: RefObject<HTMLSpanElement | null>;
 }>
 ```
+
+## Requesting repositioning 
+
+By default the comments are repositioned when:
+
+- A highlight is added or removed
+- The highlights container is resized
+- The comments container is resized
+
+It's possible that your application will contain scenarios where additional repositioning is required. 
+
+You can imperatively request repositioning via the hook: 
+
+```
+const highlightContext = useTextHighlight(); 
+highlightContext.requestRecalculatePositions();
+```
+
+
 
 
 ## SSR/RSC support 

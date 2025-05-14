@@ -3,12 +3,9 @@ import React, { PropsWithChildren, ReactNode, RefObject, useContext, useEffect, 
 import ClickAwayListener from "react-click-away-listener";
 import { createPortal } from "react-dom";
 
-export type TextHighlightProviderProps = {
-
-}
 
 
-type CommentProps = PropsWithChildren<{
+export type CommentProps = PropsWithChildren<{
     /**
      * Attach this to the `id` attribute of your main element. 
      * 
@@ -16,6 +13,8 @@ type CommentProps = PropsWithChildren<{
      */
     id: string;
     hasHover: boolean;
+
+    isSelected: boolean;
     /**
      * Attach this to click handlers for your component
      * @param hasHover 
@@ -34,9 +33,10 @@ type CommentProps = PropsWithChildren<{
      * 
      */
     ref: RefObject<HTMLDivElement | null>;
+
 }>
 
-type HighlightProps = PropsWithChildren<{
+export type HighlightProps = PropsWithChildren<{
     /**
      * Attach this to the `id` attribute of your main element. 
      * 
@@ -60,14 +60,28 @@ type HighlightProps = PropsWithChildren<{
     ref: RefObject<HTMLSpanElement | null>;
 }>
 
+
+export type MobileToastProps = PropsWithChildren<{
+    onClose: () => void;
+}>;
+
 type TextHighlightContext = {
     registerHighlight: (element: HTMLSpanElement, comment: HTMLDivElement) => void;
-    gutterRef: RefObject<HTMLElement | null>;
     requestRecalculatePositions: () => void;
 
+    gutterRef: RefObject<HTMLElement | null>;
     Comment: (props: CommentProps) => React.ReactNode;
     Highlight: (props: HighlightProps) => React.ReactNode;
 }
+
+export type TextHighlightProviderProps = PropsWithChildren<{
+    Comment?: TextHighlightContext['Comment'];
+    Highlight?: TextHighlightContext['Highlight'];
+    gutterRef: RefObject<HTMLElement | null>;
+}>;
+
+
+const DEFAULT_MEDIA_QUERY = '(max-width: 600px)';
 const TextHighlightContext = React.createContext<TextHighlightContext>({
     registerHighlight: () => {
         throw new Error("registerHighlight not implemented");
@@ -80,10 +94,22 @@ const TextHighlightContext = React.createContext<TextHighlightContext>({
     gutterRef: {
         current: null
     },
+
     Comment: DefaultComment,
-    Highlight: DefaultHighlight
+    Highlight: DefaultHighlight,
 });
 
+
+function DefaultMobileToast(props: MobileToastProps) {
+    return <div className="text-highlight-mobile-toast">
+        <button onClick={props.onClose}>
+            Close
+        </button>
+        <div className="text-highlight-mobile-toast-content">
+            {props.children}
+        </div>
+    </div>
+}
 
 function DefaultHighlight(props: HighlightProps) {
 
@@ -98,10 +124,8 @@ function DefaultHighlight(props: HighlightProps) {
         onMouseEnter={(() => setHoverStatus(true))}
         onMouseLeave={(() => setHoverStatus(false))}
         onClick={() => {
-            setTimeout(() => {
+            setSelectedStatus(true);
 
-                setSelectedStatus(true);
-            }, 10)
         }}
 
     >
@@ -115,17 +139,26 @@ function DefaultComment(props: CommentProps) {
 
     return <div
         data-testid="rth-comment"
-        className={`text-highlight-comment${props.hasHover ? ' text-highlight-hover' : ''}`}
+        className={`text-highlight-comment${props.hasHover ? ' text-highlight-hover' : ''}${props.isSelected ? ' text-highlight-selected' : ''}`}
         ref={props.ref}
         onMouseEnter={(() => props.setHoverStatus(true))}
         onMouseLeave={(() => props.setHoverStatus(false))}
+        onClick={() => props.setSelectedStatus(true)}
         id={props.id}>
+        <button
+            className="rth-close-button"
+            onClick={() => {
+                props.setSelectedStatus(false);
+            }}>
+            Close
+        </button>
         {props.children}
     </div>
 }
 
 function recalculatePositions(mapOfSpansAndComments: Map<HTMLSpanElement, HTMLDivElement>) {
     const entries = mapOfSpansAndComments.entries();
+
 
 
     // Sort the highlights so they go top to bottom, left to right
@@ -149,18 +182,31 @@ function recalculatePositions(mapOfSpansAndComments: Map<HTMLSpanElement, HTMLDi
     });
 
 
+    // Accumulated offset is how far down the page we already are
+    // ie. if you were to position the element without any padding on top, the top of it would be here
     let accumulatedOffset = 0;
     entriesArray.forEach(([span, comment]) => {
 
         const spanOffset = span.offsetTop;
-        const commentHeight = comment.clientHeight;
+        const spanHeight = span.offsetHeight;
+        const commentHeight = comment.offsetHeight;
+
+
 
         if (comment.parentElement) {
-            const actualOffset = spanOffset + (commentHeight / 2) - accumulatedOffset;
-            comment.parentElement.style.flexBasis = `${actualOffset}px`;
+            // The required basis sets the flex-basis of the containing element. 
+            // Remember the the flex-basis already accounts for the height of the content
+            // And that the content sits at the _bottom_ of the container
 
+            // Where the top of the comment should be
+            const requiredYPosition = spanOffset + (spanHeight / 2) - (commentHeight / 2);
+            // How much offset is needed to get the comment to right position, accounting for the accumulated offset
+            const requiredOffset = requiredYPosition - accumulatedOffset;
+            // Basis should never be negative
+            const requiredBasis = Math.max(requiredOffset + commentHeight, 0);
 
-            accumulatedOffset += actualOffset;
+            comment.parentElement.style.flexBasis = `${requiredBasis}px`;
+            accumulatedOffset += (Math.max(requiredBasis, commentHeight));
 
         }
 
@@ -168,6 +214,8 @@ function recalculatePositions(mapOfSpansAndComments: Map<HTMLSpanElement, HTMLDi
 }
 
 export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProviderProps>) {
+
+    const { gutterRef, Comment = DefaultComment, Highlight = DefaultHighlight } = props;
 
 
     const highlightedElementsRef = useRef<Map<HTMLSpanElement, HTMLDivElement>>(new Map());
@@ -197,12 +245,12 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
 
 
         const onResize = () => {
+            console.log("Resizing");
             recalculatePositions(highlightedElementsRef.current);
         }
 
         const resizeObserver = new ResizeObserver(onResize);
         ([containerRef.current, gutterRef.current]).forEach((v) => {
-            console.log('attach ')
             resizeObserver.observe(v);
         })
 
@@ -213,29 +261,26 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
 
     }, [])
 
-    const gutterRef = useRef<HTMLDivElement>(null);
-
     const registerHighlight = (element: HTMLSpanElement, commentEl: HTMLDivElement) => {
         highlightedElementsRef.current.set(element, commentEl);
         recalculatePositions(highlightedElementsRef.current);
     }
 
 
-    return <div className="text-highlight-provider-outer">
-
-        <div className="text-highlight-left-gutter"></div>
-
-        <div className="text-highlight-content-container" ref={containerRef}>
-            <TextHighlightContext.Provider value={{ registerHighlight, gutterRef, Comment: DefaultComment, Highlight: DefaultHighlight, requestRecalculatePositions: recalculatePositionsRef.current }}>
-                {props.children}
-            </TextHighlightContext.Provider>
-
-        </div>
-        <div className="text-highlight-right-gutter" ref={gutterRef}>
-
-        </div>
+    return <div className="text-highlight-content-container" ref={containerRef}>
+        <TextHighlightContext.Provider value={{ registerHighlight, gutterRef, Comment, Highlight, requestRecalculatePositions: recalculatePositionsRef.current }}>
+            {props.children}
+        </TextHighlightContext.Provider>
 
     </div>
+
+
+}
+
+
+export function useTextHighlight() {
+    const highlightContext = useContext(TextHighlightContext);
+    return highlightContext;
 }
 
 
@@ -257,20 +302,28 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
 
     const { Comment, Highlight } = highlightContext;
 
-
-
     useEffect(() => {
         setIsReady(true);
 
         if (spanRef.current && commentRef.current) {
-
             highlightContext.registerHighlight(spanRef.current, commentRef.current)
         }
-
-
-
     }, [isReady]);
 
+
+    const comment = <Comment
+        isSelected={isSelected}
+        id={id}
+        setHoverStatus={setHasHover}
+        hasHover={hasHover}
+        ref={commentRef}
+        setSelectedStatus={(value) => {
+            setTimeout(() => {
+                setIsSelected(value)
+            }, 10)
+        }}>
+        {props.commentContent}
+    </Comment>;
 
 
     return <>
@@ -282,30 +335,44 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
             ref={spanRef}
             commentId={id}
             setHoverStatus={setHasHover}
-            setSelectedStatus={setIsSelected}
-        >{props.children}</Highlight>
+            setSelectedStatus={(value) => {
+                setTimeout(() => {
+                    setIsSelected(value)
+                }, 10)
+            }}
+
+        >{props.children}</Highlight >
 
 
-        {highlightContext.gutterRef.current &&
+        {
+            highlightContext.gutterRef.current &&
             createPortal(
-                <ClickAwayListener onClickAway={() => {
-                    if (isSelected) {
-                        setIsSelected(false)
-                    }
-                }}>
 
-                    <div className={`text-highlight-comment-outer${isSelected ? ' text-highlight-selected' : ''}${isReady ? '' : 'not-ready'}`}>
-                        <button onClick={() => setIsSelected(false)}>Close </button>
+                <>
+                    <ClickAwayListener onClickAway={() => {
+                        if (isSelected) {
+                            setIsSelected(false)
+                        }
+                    }}>
+                        <div data-testid="rth-flexing-child" style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: "flex-end",
+                            // visibility: isMobile ? 'hidden' : 'visible',
+                        }}>
+                            {comment}
 
 
-                        <Comment id={id} setHoverStatus={setHasHover} hasHover={hasHover} ref={commentRef} setSelectedStatus={setIsSelected}>
-                            {props.commentContent}
-                        </Comment>
+                        </div>
 
-                    </div>
-                </ClickAwayListener>
+
+
+                    </ClickAwayListener >
+                </>
+
                 ,
                 highlightContext.gutterRef.current
-            )}
+            )
+        }
     </>
 }
