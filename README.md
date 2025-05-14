@@ -27,6 +27,7 @@ function App() {
 	const toastContainerRef = useRef<HTMLDivElement>(null);
 	return (
 
+                {/* This is just layout stuff to get a main content and side bar layout*/
 		<div style={{
 			display: "flex",
 			flexFlow: "row nowrap",
@@ -39,12 +40,6 @@ function App() {
 				<TextHighlightProvider gutterRef={ref}>
 					{props.children}
 				</TextHighlightProvider >
-				<div
-					ref={toastContainerRef}
-				>
-
-				</div>
-
 			</main>
 
 			{/* 👇 This is the important part
