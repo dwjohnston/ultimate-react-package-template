@@ -12,8 +12,11 @@ For mobile view, the comments are not displayed until they highlight is clicked.
 
 Near the top of your application you will need: 
 
-- A gutter container, with a ref attached, where the comments will be inserted. This container needs to be a column flex box. 
-- A toast container, with ref attached, where comments will be inserted in mobile mode. The implementation of this is upto you, and how you want your toasts to work.
+- A gutter container, with a ref attached, where the comments will be inserted.
+   - This container needs to be a column flexbox for desktop views
+   - Do not use the `gap` property as the position calculations will not detect them. If you need spacing, add margin to your comment components
+   - For mobile, if you want the comments to display on click as a toast, implementation is up to you, in my implementation it is a position:fixed set at the bottom of the screen.
+
 - The TextHighlightProvider - pass the ref to the comments container to it.
 
 
@@ -50,7 +53,6 @@ function App() {
 			<div ref={ref} style={{
 				display: "flex",
 				flexFlow: "column nowrap",
-				gap: 4,
 				flex: "0 0 200px",
 			}}></div>
 		</div>
@@ -106,20 +108,58 @@ You can provide your own components by passing them into the context provider:
 These are the requisite typings: 
 
 ```typescript
-type CommentProps = PropsWithChildren<{
+export type CommentProps = PropsWithChildren<{
+    /**
+     * Attach this to the `id` attribute of your main element. 
+     * 
+     * This for a11y purposes so the highlight can be linked with the comment.
+     */
     id: string;
     hasHover: boolean;
+
+    isSelected: boolean;
+    /**
+     * Attach this to click handlers for your component
+     * @param hasHover 
+     * @returns 
+     */
     setSelectedStatus: (isSelected: boolean) => void;
+    /**
+     * Attach this to onMouseEnter and onMouseLeave event handlers
+     * @param hasHover 
+     * @returns 
+     */
     setHoverStatus: (hasHover: boolean) => void;
+
+    /**
+     * This ref needs to be attached to the main element 
+     * 
+     */
     ref: RefObject<HTMLDivElement | null>;
+
 }>
 
-type HighlightProps = PropsWithChildren<{
+export type HighlightProps = PropsWithChildren<{
+    /**
+     * Attach this to the `id` attribute of your main element. 
+     * 
+     * This for a11y purposes so the highlight can be linked with the comment.
+     */
     commentId: string;
     isSelected: boolean;
     hasHover: boolean;
     setSelectedStatus: (isSelected: boolean) => void;
+    /**
+     * Attach this to onMouseEnter and onMouseLeave event handlers
+     * @param hasHover 
+     * @returns 
+     */
     setHoverStatus: (hasHover: boolean) => void;
+
+    /**
+     * This ref needs to be attached to the main element 
+     * 
+     */
     ref: RefObject<HTMLSpanElement | null>;
 }>
 ```
