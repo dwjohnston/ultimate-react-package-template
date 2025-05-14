@@ -2,7 +2,6 @@
 import React, { PropsWithChildren, ReactNode, RefObject, useContext, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import ClickAwayListener from "react-click-away-listener";
 import { createPortal } from "react-dom";
-import { useMediaQuery } from "react-responsive";
 
 
 

@@ -31,9 +31,7 @@
     "test-storybook": "test-storybook"
   },
   "dependencies": {
-    "@storybook/addon-interactions": "^8.6.12",
-    "react-click-away-listener": "^2.4.0",
-    "react-responsive": "^10.0.1"
+    "react-click-away-listener": "^2.4.0"
   },
   "peerDependencies": {
     "react": ">=19.0.0",
