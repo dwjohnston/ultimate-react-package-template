@@ -97,7 +97,7 @@ export const Main: Story = {
 					</TextHighlight>then the <TextHighlight commentContent={<div>Comment C</div>}>
 						comments
 					</TextHighlight>
-					will be <TextHighlight commentContent={<div>Comment C.</div>}>
+					will be <TextHighlight commentContent={<div>Comment D.</div>}>
 						nicely stacked.
 					</TextHighlight>
 				</p>
