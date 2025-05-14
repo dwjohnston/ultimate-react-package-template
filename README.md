@@ -1,6 +1,6 @@
 # react-text-highlight
 
-Storybook here: https://dwjohnston.github.io/react-text-highlight
+Storybook here: [https://dwjohnston.github.io/react-text-highlight](https://react-text-highlight.netlify.app/)
 
 This is a lightweight component that will allow display highlighted spans in your main content, with linked comments/footnotes in the page margin. 
 
