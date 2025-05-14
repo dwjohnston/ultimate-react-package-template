@@ -12,13 +12,16 @@ For mobile view, the comments are not displayed until they highlight is clicked.
 
 Near the top of your application you will need: 
 
-- A container, with a ref attached, where the comments will be inserted. This container needs to be a column flex box. 
+- A gutter container, with a ref attached, where the comments will be inserted. This container needs to be a column flex box. 
+- A toast container, with ref attached, where comments will be inserted in mobile mode. The implementation of this is upto you, and how you want your toasts to work.
 - The TextHighlightProvider - pass the ref to the comments container to it.
+
 
 ```jsx
 
 function App() {
 	const ref = useRef<HTMLDivElement>(null);
+	const toastContainerRef = useRef<HTMLDivElement>(null);
 	return (
 
 		<div style={{
@@ -33,6 +36,11 @@ function App() {
 				<TextHighlightProvider gutterRef={ref}>
 					{props.children}
 				</TextHighlightProvider >
+				<div
+					ref={toastContainerRef}
+				>
+
+				</div>
 
 			</main>
 

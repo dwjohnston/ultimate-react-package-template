@@ -10,7 +10,6 @@ function Demo(props: PropsWithChildren<{
 
 }>) {
 	const ref = useRef<HTMLDivElement>(null);
-	const toastContainerRef = useRef<HTMLDivElement>(null);
 	return (
 
 		<div style={{
@@ -18,11 +17,10 @@ function Demo(props: PropsWithChildren<{
 			flexFlow: "row nowrap",
 		}}>
 			<main
-				ref={toastContainerRef}
 				style={{
 					flex: "1 1 auto",
 				}}>
-				<TextHighlightProvider gutterRef={ref} toastContainerRef={toastContainerRef} Highlight={props.Highlight} Comment={props.Comment}>
+				<TextHighlightProvider gutterRef={ref} Highlight={props.Highlight} Comment={props.Comment}>
 
 					{props.children}
 				</TextHighlightProvider >
@@ -30,17 +28,18 @@ function Demo(props: PropsWithChildren<{
 			</main>
 
 			{/* 👇 This is the important part
-				The container for the comments to sit in, needs to be a column flex box.
+				The container for the comments to sit in. 
+
+				For regular desktop view, this needs to a be a flex container with a column direction. 
+
+				If you want to use a mobile toast, then it's upto you you would implement it, 
+				but you could make a position: fixed element at the bottom of the screen 
+				And use media queries on the individual comments to to only show them if they are selected.
+
 			*/}
 			<div ref={ref}
 				className="right-gutter"
-				style={{
-					display: "flex",
-					flexDirection: "column",
-					flexWrap: "nowrap",
-					gap: 4,
-					flex: "0 0 200px",
-				}}></div>
+			></div>
 		</div>
 	);
 
@@ -67,163 +66,65 @@ export const Main: Story = {
 	args: {
 		children: (
 			<main>
-				{" "}
+				<h1>React Text Highlight</h1>
 				<p>
-					Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+					React Text Highlight allows your to <TextHighlight commentContent={<div>I am the corresponding text.</div>}>
+						highlight portions of some next
+					</TextHighlight> and have a corresponding comment appear in the page margin.
+				</p>
+				<p>
+					This is a large block of text. 	Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
 					faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-					pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
+					pretium tellus duis convallis.<TextHighlight commentContent={<div>Comments will appear in their corresponding vertical position in the margin.</div>}>
+						Tempus leo eu aenean sed diam urna
+					</TextHighlight>
 					tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
+					Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
+					hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
+					per conubia nostra inceptos himenaeos.Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
+					Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
+					hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
+					per conubia nostra inceptos himenaeos.Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
 					Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
 					hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
 					per conubia nostra inceptos himenaeos.
 				</p>
 				<p>
-					Lorem{" "}
-					<TextHighlight commentContent={<div>This is the comment</div>}>
-						ipsum dolor sit amet consectetur adipiscing elit.
-					</TextHighlight>{" "}
-					Quisque faucibus ex sapien vitae pellentesque sem placerat. In id
-					cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam
-					urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum
-					egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
-					hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
-					per conubia nostra inceptos himenaeos.
-				</p>
-				<p>
-					Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-					faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-					pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
-					tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
-					Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
-					hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
-					per conubia nostra inceptos himenaeos.
-				</p>
-				<p>
-					<TextHighlight commentContent={<div>Comment A</div>}>
-						Lorem ipsum dolor
-					</TextHighlight>{" "}
-					sit amet{" "}
-					<TextHighlight commentContent={<div>Comment B</div>}>
-						consectetur adipiscing
-					</TextHighlight>{" "}
-					elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In
-					id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed
-					diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum
-					egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
-					hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
-					per conubia nostra inceptos himenaeos.
-				</p>
-				<p>
-					<TextHighlight
-						commentContent={
-							<div>
-								<p>This is a large comment</p>
-								<p>Line 2</p>
-								<p>Line 3</p>
-							</div>
-						}
-					>
-						Lorem ipsum dolor sit amet consectetur adipiscing elit.
-					</TextHighlight>{" "}
-					Quisque faucibus ex sapien vitae pellentesque sem placerat. In id
-					cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam
-					urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum
-					egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
-					hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
-					per conubia nostra inceptos himenaeos.
-				</p>
-				<p>
-					Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-					faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-					pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
-					tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
-					Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
-					hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
-					per conubia nostra inceptos himenaeos.
-				</p>
-				<p>
-					Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-					faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-					pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
-					tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
-					Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
-					hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
-					per conubia nostra inceptos himenaeos.
-				</p>
-				<p>
-					Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-					faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-					pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
-					tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
-					Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
-					hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
-					per conubia nostra inceptos himenaeos.
-				</p>
-				<p>
-					Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-					faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-					pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
-					tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
-					Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
-					hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
-					per conubia nostra inceptos himenaeos.
-				</p>
-				<p>
-					Lorem ipsum dolor sit amet consectetur adipiscing elit.{" "}
-					<TextHighlight commentContent={<div>This is the final comment</div>}>
-						Quisque faucibus ex sapien vitae pellentesque sem placerat. In id
-						cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed
-						diam urna tempor. Pulvinar vivamus fringilla lacus nec metus
-						bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc
-						posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad
-						litora torquent per conubia nostra inceptos himenaeos.
+					If <TextHighlight commentContent={<div>Comment A</div>}>
+						multiple highlights
+					</TextHighlight> appear in the <TextHighlight commentContent={<div>Comment B</div>}>
+						same line
+					</TextHighlight>then the <TextHighlight commentContent={<div>Comment C</div>}>
+						comments
+					</TextHighlight>
+					will be <TextHighlight commentContent={<div>Comment C.</div>}>
+						nicely stacked.
 					</TextHighlight>
 				</p>
+
 				<p>
-					Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+					This is a large block of text. 	Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
 					faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-					pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
+					pretium tellus duis convallis.
 					tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
 					Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
 					hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
 					per conubia nostra inceptos himenaeos.
 				</p>
+
 				<p>
-					Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
+					This is a large block of text. 	Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
 					faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-					pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
+					pretium tellus duis convallis.<TextHighlight commentContent={<div style={{ border: "1px solid lime", backgroundColor: "#444", height: 100 }}>Comments can contain any kind of content</div>}>
+						Tempus leo eu aenean sed diam urna
+					</TextHighlight>
 					tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
 					Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
 					hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
 					per conubia nostra inceptos himenaeos.
 				</p>
-				<p>
-					Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-					faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-					pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
-					tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
-					Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
-					hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
-					per conubia nostra inceptos himenaeos.
-				</p>
-				<p>
-					Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-					faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-					pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
-					tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
-					Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
-					hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
-					per conubia nostra inceptos himenaeos.
-				</p>
-				<p>
-					Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
-					faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-					pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
-					tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
-					Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut
-					hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent
-					per conubia nostra inceptos himenaeos.
-				</p>
+
+
 			</main>
 		),
 	},
@@ -232,7 +133,7 @@ export const Main: Story = {
 
 
 		const highlightEls = canvas.getAllByTestId("rth-highlight");
-		expect(highlightEls).toHaveLength(5);
+		expect(highlightEls).toHaveLength(7);
 
 
 
@@ -240,14 +141,14 @@ export const Main: Story = {
 		// For some reason on local dev this doesn't matter, but 
 		// For production it does? I don't know
 		await waitFor(() => {
-			expect(canvas.getAllByTestId("rth-comment")).toHaveLength(5);
+			expect(canvas.getAllByTestId("rth-comment")).toHaveLength(7);
 		});
 
 		// This has been a good play around with storybook testing. 
 		// Really quite enjoying it 
 		if (canvasElement.clientWidth < 600) {
 			const commentEls = canvas.getAllByTestId("rth-comment");
-			expect(commentEls).toHaveLength(5); // but they're not visible
+			expect(commentEls).toHaveLength(7); // but they're not visible
 			commentEls.forEach((v) => {
 				expect(v).not.toBeVisible();
 			})
@@ -256,15 +157,14 @@ export const Main: Story = {
 
 
 			await waitFor(() => {
-				const commentEls = canvas.getAllByTestId("rth-comment");
-				expect(commentEls).toHaveLength(6); // but they're not visible
+				expect(commentEls).toHaveLength(7); // but they're not visible
 				expect(commentEls[0]).toBeVisible();
 			});
 
 		}
 		else {
 			const commentEls = canvas.getAllByTestId("rth-comment");
-			expect(commentEls).toHaveLength(5);
+			expect(commentEls).toHaveLength(7);
 
 			const firstComment = commentEls[0];
 			expect(firstComment).not.toHaveClass("text-highlight-hover");
@@ -280,10 +180,13 @@ export const Main: Story = {
 function RandomParagraph() {
 	const [randomNumber] = useState(Math.floor(Math.random() * 5));
 
+	const style = {
+		border: "1px dashed grey",
+	}
 	switch (randomNumber) {
 		case 0: {
 			return (
-				<p>
+				<p style={style}>
 					<TextHighlight
 						commentContent={
 							<div>
@@ -306,7 +209,7 @@ function RandomParagraph() {
 		}
 		case 1: {
 			return (
-				<p>
+				<p style={style}>
 					<TextHighlight commentContent={<div>Comment A</div>}>
 						Lorem ipsum dolor
 					</TextHighlight>{" "}
@@ -325,7 +228,7 @@ function RandomParagraph() {
 		}
 		case 2: {
 			return (
-				<p>
+				<p style={style}>
 					Lorem ipsum dolor sit amet consectetur adipiscing elit.{" "}
 					<TextHighlight commentContent={<div>This is the comment</div>}>
 						Quisque faucibus ex sapien vitae pellentesque sem placerat. In id
@@ -340,7 +243,7 @@ function RandomParagraph() {
 		}
 		default: {
 			return (
-				<p>
+				<p style={style}>
 					Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
 					faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
 					pretium tellus duis convallis. Tempus leo eu aenean sed diam urna
@@ -383,12 +286,12 @@ export const Interactive = () => {
 			style={{
 				flex: "1 1 auto",
 			}}>
-			<p>
+			<p >
 				The purpose of this story is to demonstrate that when content is added and removed the comments still behave nicely
 			</p>
-			<TextHighlightProvider gutterRef={ref} toastContainerRef={toastContainerRef}>
+			<TextHighlightProvider gutterRef={ref} >
 
-				<div>
+				<div style={{ marginBottom: 30 }}>
 					<button
 						onClick={() => {
 							setParagraphs((prev) => prev + 1);
@@ -410,7 +313,7 @@ export const Interactive = () => {
 			gap: 4,
 			flex: "0 0 200px",
 		}}></div>
-	</div>
+	</div >
 
 }
 
@@ -445,8 +348,7 @@ export const SmallerExample: Story = {
 
 
 			await waitFor(() => {
-				const commentEls = canvas.getAllByTestId("rth-comment");
-				expect(commentEls).toHaveLength(3); // but they're not visible
+				expect(commentEls).toHaveLength(2); // but they're not visible
 				expect(commentEls[0]).toBeVisible();
 			});
 		}
@@ -598,38 +500,8 @@ export const WithCustomComponents: Story = {
 			expect(canvas.getAllByTestId("custom-comment")).toHaveLength(2);
 		});
 
-		console.log(canvasElement, canvasElement.clientWidth);
-		// This has been a good play around with storybook testing. 
-		// Really quite enjoying it 
-		if (canvasElement.clientWidth < 600) {
-			const commentEls = canvas.getAllByTestId("custom-comment");
-			expect(commentEls).toHaveLength(2); // but they're not visible
+		// I'm not testing repsonsiveness for custom components here. 
+		// It's a bit fiddly doing media queries, you're basically forced into using a css file. 
 
-			commentEls.forEach((v) => {
-				console.log(v)
-				expect(v).not.toBeVisible();
-			})
-
-			await userEvent.click(highlightEls[0]);
-
-
-			/**
-			 * Note the behaviour of the comments for mobile
-			 * Actually the comments be duplicated into the toast container for mobile experience
-			 */
-			await waitFor(() => {
-				const commentEls2 = canvas.getAllByTestId("custom-comment");
-				expect(commentEls2).toHaveLength(3); // but they're not visible
-				expect(commentEls2[0]).toBeVisible();
-
-			});
-
-
-		}
-		else {
-			const commentEls = canvas.getAllByTestId("custom-comment");
-			expect(commentEls).toHaveLength(2);
-
-		}
 	}
 }

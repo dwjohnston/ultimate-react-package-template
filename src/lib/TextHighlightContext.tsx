@@ -35,11 +35,6 @@ export type CommentProps = PropsWithChildren<{
      */
     ref: RefObject<HTMLDivElement | null>;
 
-    /**
-     * You might want to display you content differently when the content is in a mobile toast
-     * If need be, this prop can be used to determine that
-     */
-    isInMobileToast: boolean;
 }>
 
 export type HighlightProps = PropsWithChildren<{
@@ -76,20 +71,14 @@ type TextHighlightContext = {
     requestRecalculatePositions: () => void;
 
     gutterRef: RefObject<HTMLElement | null>;
-    toastContainerRef: RefObject<HTMLElement | null>;
     Comment: (props: CommentProps) => React.ReactNode;
     Highlight: (props: HighlightProps) => React.ReactNode;
-    MobileToast: (props: MobileToastProps) => React.ReactNode;
-    mediaQuery: Parameters<typeof useMediaQuery>[0]['query'];
 }
 
 export type TextHighlightProviderProps = PropsWithChildren<{
     Comment?: TextHighlightContext['Comment'];
     Highlight?: TextHighlightContext['Highlight'];
-    MobileToast?: TextHighlightContext['MobileToast'];
     gutterRef: RefObject<HTMLElement | null>;
-    toastContainerRef: RefObject<HTMLElement | null>;
-    mediaQuery?: TextHighlightContext['mediaQuery'];
 }>;
 
 
@@ -106,13 +95,9 @@ const TextHighlightContext = React.createContext<TextHighlightContext>({
     gutterRef: {
         current: null
     },
-    toastContainerRef: {
-        current: null
-    },
+
     Comment: DefaultComment,
     Highlight: DefaultHighlight,
-    MobileToast: DefaultMobileToast,
-    mediaQuery: DEFAULT_MEDIA_QUERY
 });
 
 
@@ -155,12 +140,19 @@ function DefaultComment(props: CommentProps) {
 
     return <div
         data-testid="rth-comment"
-        className={`text-highlight-comment${props.hasHover ? ' text-highlight-hover' : ''}${props.isSelected ? ' text-highlight-selected' : ''}${props.isInMobileToast ? ' is-in-mobile-toast' : ''}`}
+        className={`text-highlight-comment${props.hasHover ? ' text-highlight-hover' : ''}${props.isSelected ? ' text-highlight-selected' : ''}`}
         ref={props.ref}
         onMouseEnter={(() => props.setHoverStatus(true))}
         onMouseLeave={(() => props.setHoverStatus(false))}
         onClick={() => props.setSelectedStatus(true)}
         id={props.id}>
+        <button
+            className="rth-close-button"
+            onClick={() => {
+                props.setSelectedStatus(false);
+            }}>
+            Close
+        </button>
         {props.children}
     </div>
 }
@@ -190,18 +182,32 @@ function recalculatePositions(mapOfSpansAndComments: Map<HTMLSpanElement, HTMLDi
 
     });
 
+
+    // Accumulated offset is how far down the page we already are
+    // ie. if you were to position the element without any padding on top, the top of it would be here
     let accumulatedOffset = 0;
     entriesArray.forEach(([span, comment]) => {
 
         const spanOffset = span.offsetTop;
-        const commentHeight = comment.clientHeight;
+        const spanHeight = span.offsetHeight;
+        const commentHeight = comment.offsetHeight;
+
+
 
         if (comment.parentElement) {
-            const actualOffset = spanOffset + (commentHeight / 2) - accumulatedOffset;
-            comment.parentElement.style.flexBasis = `${actualOffset}px`;
+            // The required basis sets the flex-basis of the containing element. 
+            // Remember the the flex-basis already accounts for the height of the content
+            // And that the content sits at the _bottom_ of the container
 
+            // Where the top of the comment should be
+            const requiredYPosition = spanOffset + (spanHeight / 2) - (commentHeight / 2);
+            // How much offset is needed to get the comment to right position, accounting for the accumulated offset
+            const requiredOffset = requiredYPosition - accumulatedOffset;
+            // Basis should never be negative
+            const requiredBasis = Math.max(requiredOffset + commentHeight, 0);
 
-            accumulatedOffset += actualOffset;
+            comment.parentElement.style.flexBasis = `${requiredBasis}px`;
+            accumulatedOffset += (Math.max(requiredBasis, commentHeight));
 
         }
 
@@ -210,7 +216,7 @@ function recalculatePositions(mapOfSpansAndComments: Map<HTMLSpanElement, HTMLDi
 
 export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProviderProps>) {
 
-    const { gutterRef, toastContainerRef, Comment = DefaultComment, Highlight = DefaultHighlight, MobileToast = DefaultMobileToast, mediaQuery = DEFAULT_MEDIA_QUERY } = props;
+    const { gutterRef, Comment = DefaultComment, Highlight = DefaultHighlight } = props;
 
 
     const highlightedElementsRef = useRef<Map<HTMLSpanElement, HTMLDivElement>>(new Map());
@@ -263,7 +269,7 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
 
 
     return <div className="text-highlight-content-container" ref={containerRef}>
-        <TextHighlightContext.Provider value={{ toastContainerRef, registerHighlight, gutterRef, Comment, Highlight, MobileToast, requestRecalculatePositions: recalculatePositionsRef.current, mediaQuery }}>
+        <TextHighlightContext.Provider value={{ registerHighlight, gutterRef, Comment, Highlight, requestRecalculatePositions: recalculatePositionsRef.current }}>
             {props.children}
         </TextHighlightContext.Provider>
 
@@ -295,13 +301,7 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
 
     const [isReady, setIsReady] = useState(false);
 
-    const { Comment, Highlight, MobileToast } = highlightContext;
-
-    const isMobile = useMediaQuery({
-        query: highlightContext.mediaQuery
-    })
-
-
+    const { Comment, Highlight } = highlightContext;
 
     useEffect(() => {
         setIsReady(true);
@@ -313,7 +313,6 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
 
 
     const comment = <Comment
-        isInMobileToast={isMobile}
         isSelected={isSelected}
         id={id}
         setHoverStatus={setHasHover}
@@ -360,7 +359,7 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: "flex-end",
-                            visibility: isMobile ? 'hidden' : 'visible',
+                            // visibility: isMobile ? 'hidden' : 'visible',
                         }}>
                             {comment}
 
@@ -374,25 +373,6 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
 
                 ,
                 highlightContext.gutterRef.current
-            )
-        }
-        {
-            isMobile && isSelected && highlightContext.toastContainerRef.current &&
-            createPortal(
-                <ClickAwayListener onClickAway={() => {
-                    if (isSelected) {
-                        setIsSelected(false)
-                    }
-                }}>
-                    < MobileToast onClose={() => {
-                        setIsSelected(false);
-                    }
-                    }>
-                        {comment}
-                    </MobileToast >
-                </ClickAwayListener>
-                ,
-                highlightContext.toastContainerRef.current
             )
         }
     </>

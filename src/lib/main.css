@@ -10,6 +10,23 @@
     --highlight-comment-bg: #f6e69c;
 }
 
+.right-gutter {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    flex: 0 0 200px;
+
+    @media screen and (max-width: 600px) {
+
+        display: block;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+    }
+}
+
 @media (prefers-color-scheme: dark) {
     :root {
 
@@ -36,28 +53,52 @@
     color: var(--highlight-text-color);
     box-sizing: border-box;
 
-    margin-left: 0.4em;
+    margin: 2px;
     padding: 1em;
     font-size: 0.75em;
     max-width: 200px;
     border: solid 1px transparent;
-}
 
-@media screen and (max-width: 600px) {
-    .right-gutter {
-        display: none !important;
+
+
+    @media screen and (max-width: 600px) {
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        padding: 1em;
+        /* display: none; */
+
+        &.text-highlight-selected {
+            display: block;
+
+            /*Got help from this video: https://www.youtube.com/watch?v=vmDEHAzj2XE */
+            transition-property: display;
+            transition-duration: 1s;
+            transition-behavior: allow-discrete;
+            animation: 0.1s ease-out 0s 1 slideInFromBottom;
+
+        }
+
+        &:not(.text-highlight-selected) {
+            animation: 0.1s ease-out 0s 1 slideOutToBottom;
+            display: none;
+            transition-property: display;
+            transition-duration: 0.1s;
+            transition-behavior: allow-discrete;
+        }
+
     }
 }
 
 
-.text-highlight-hover:not(.is-in-mobile-toast) {
+.text-highlight-hover {
     border-color: var(--highlight-border-hover);
     box-shadow: 1px 1px 2px var(--highlight-comment-box-shadow);
     transition: box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
     cursor: pointer;
 }
 
-.text-highlight-selected:not(.is-in-mobile-toast) {
+.text-highlight-selected {
     border: solid 1px var(--highlight-border-selected);
 }
 
@@ -69,38 +110,23 @@
     }
 
     100% {
-        transform: translateX(0);
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideOutToBottom {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(100%);
     }
 }
 
 
-.text-highlight-mobile-toast {
-    animation: 0.1s ease-out 0s 1 slideInFromBottom;
-    background-color: var(--highlight-comment-bg);
-
-
-    position: fixed;
-    display: block;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
-    border: solid 1px var(--highlight-border-selected);
-
-    /* Animate transform and opacity */
-    transition:
-        transform 0.1s ease-out,
-        opacity 0.1s ease-out;
-}
-
-.text-highlight-mobile-toast-content {
-    display: flex;
-    flex-flow: row nowrap;
-
-}
-
-.text-highlight-mobile-toast>button {
-    display: block;
+.text-highlight-comment>button.rth-close-button {
+    display: none;
     margin: 2px 2px 0 auto;
 
     background: none;
@@ -111,10 +137,15 @@
     padding: 0.5em 1em;
     color: var(--highlight-text-color);
     font: inherit;
-    font-size: 0.5em;
+    font-size: 0.75em;
     cursor: pointer;
     outline: none;
     transition: background 0.2s, color 0.2s;
+
+
+    @media screen and (max-width: 600px) {
+        display: block;
+    }
 
 
 }
