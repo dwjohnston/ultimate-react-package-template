@@ -1,12 +1,16 @@
 {
-  "name": "react-text-highlight",
+  "name": "@blacksheepcode/react-text-highlight",
   "author": {
     "name": "David Johnston",
     "email": "david@blacksheepcode.com",
     "url": "https://blacksheepcode.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dwjohnston/react-text-highlight.git"
+  },
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "license": "MIT",
   "main": "./dist/exports.js",
   "files": [
