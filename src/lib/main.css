@@ -63,9 +63,8 @@
 
     @media screen and (max-width: 600px) {
         max-width: 100%;
-        margin-left: 0;
-        margin-right: 0;
-        padding: 1em;
+        margin: 0;
+        padding: 0.25em 0.5em 0.5em;
         /* display: none; */
 
         &.text-highlight-selected {
@@ -127,7 +126,8 @@
 
 .text-highlight-comment>button.rth-close-button {
     display: none;
-    margin: 2px 2px 0 auto;
+    margin: 2px 2px 6px auto;
+
 
     background: none;
     background-color: var(--highlight-comment-bg);

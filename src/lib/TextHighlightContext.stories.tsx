@@ -68,14 +68,14 @@ export const Main: Story = {
 			<main>
 				<h1>React Text Highlight</h1>
 				<p>
-					React Text Highlight allows your to <TextHighlight commentContent={<div>I am the corresponding text.</div>}>
+					React Text Highlight allows your to <TextHighlight comment={<div>I am the corresponding text.</div>}>
 						highlight portions of some next
 					</TextHighlight> and have a corresponding comment appear in the page margin.
 				</p>
 				<p>
 					This is a large block of text. 	Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
 					faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-					pretium tellus duis convallis.<TextHighlight commentContent={<div>Comments will appear in their corresponding vertical position in the margin.</div>}>
+					pretium tellus duis convallis.<TextHighlight comment={<div>Comments will appear in their corresponding vertical position in the margin.</div>}>
 						Tempus leo eu aenean sed diam urna
 					</TextHighlight>
 					tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
@@ -90,14 +90,14 @@ export const Main: Story = {
 					per conubia nostra inceptos himenaeos.
 				</p>
 				<p>
-					If <TextHighlight commentContent={<div>Comment A</div>}>
+					If <TextHighlight comment={<div>Comment A</div>}>
 						multiple highlights
-					</TextHighlight> appear in the <TextHighlight commentContent={<div>Comment B</div>}>
+					</TextHighlight> appear in the <TextHighlight comment={<div>Comment B</div>}>
 						same line
-					</TextHighlight>then the <TextHighlight commentContent={<div>Comment C</div>}>
+					</TextHighlight>then the <TextHighlight comment={<div>Comment C</div>}>
 						comments
 					</TextHighlight>
-					will be <TextHighlight commentContent={<div>Comment D.</div>}>
+					will be <TextHighlight comment={<div>Comment D.</div>}>
 						nicely stacked.
 					</TextHighlight>
 				</p>
@@ -115,7 +115,7 @@ export const Main: Story = {
 				<p>
 					This is a large block of text. 	Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque
 					faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi
-					pretium tellus duis convallis.<TextHighlight commentContent={<div style={{ border: "1px solid lime", backgroundColor: "#444", height: 100 }}>Comments can contain any kind of content</div>}>
+					pretium tellus duis convallis.<TextHighlight comment={<div style={{ border: "1px solid lime", backgroundColor: "#444", height: 100 }}>Comments can contain any kind of content</div>}>
 						Tempus leo eu aenean sed diam urna
 					</TextHighlight>
 					tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
@@ -161,6 +161,14 @@ export const Main: Story = {
 				expect(commentEls[0]).toBeVisible();
 			});
 
+			const closeButton = within(commentEls[0]).getByRole("button");
+			await userEvent.click(closeButton);
+
+			await waitFor(() => {
+				expect(commentEls).toHaveLength(7);
+				expect(commentEls[0]).not.toBeVisible();
+			});
+
 		}
 		else {
 			const commentEls = canvas.getAllByTestId("rth-comment");
@@ -188,7 +196,7 @@ function RandomParagraph() {
 			return (
 				<p style={style}>
 					<TextHighlight
-						commentContent={
+						comment={
 							<div>
 								<p>This is a large comment</p>
 								<p>Line 2</p>
@@ -210,11 +218,11 @@ function RandomParagraph() {
 		case 1: {
 			return (
 				<p style={style}>
-					<TextHighlight commentContent={<div>Comment A</div>}>
+					<TextHighlight comment={<div>Comment A</div>}>
 						Lorem ipsum dolor
 					</TextHighlight>{" "}
 					sit amet{" "}
-					<TextHighlight commentContent={<div>Comment B</div>}>
+					<TextHighlight comment={<div>Comment B</div>}>
 						consectetur adipiscing
 					</TextHighlight>{" "}
 					elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In
@@ -230,7 +238,7 @@ function RandomParagraph() {
 			return (
 				<p style={style}>
 					Lorem ipsum dolor sit amet consectetur adipiscing elit.{" "}
-					<TextHighlight commentContent={<div>This is the comment</div>}>
+					<TextHighlight comment={<div>This is the comment</div>}>
 						Quisque faucibus ex sapien vitae pellentesque sem placerat. In id
 						cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed
 						diam urna tempor. Pulvinar vivamus fringilla lacus nec metus
@@ -320,9 +328,9 @@ export const Interactive = () => {
 export const SmallerExample: Story = {
 	args: {
 		children: <p>
-			Hello I am some <TextHighlight commentContent={<p>
+			Hello I am some <TextHighlight comment={<p>
 				I am the comment.
-			</p>}>text</TextHighlight>. Here is some more text, and here is the <TextHighlight commentContent={<p>I am the second comment.</p>}>highlight.</TextHighlight>
+			</p>}>text</TextHighlight>. Here is some more text, and here is the <TextHighlight comment={<p>I am the second comment.</p>}>highlight.</TextHighlight>
 		</p>
 	},
 	play: async ({ canvasElement }) => {
@@ -398,7 +406,7 @@ export const SingleHighlight: Story = {
 				per conubia nostra inceptos himenaeos.
 			</p>
 
-			<p>	Hello I am some <TextHighlight commentContent={<p>
+			<p>	Hello I am some <TextHighlight comment={<p>
 				I am the comment.
 			</p>}>text</TextHighlight>. Here is some more text.
 			</p>
@@ -433,7 +441,7 @@ function CustomHighlight(props: HighlightProps) {
 		hasHover,
 		setSelectedStatus,
 		setHoverStatus,
-		ref } = props;
+		highlightRef } = props;
 	return <span
 		data-testid="custom-highlight"
 		id={commentId}
@@ -447,7 +455,7 @@ function CustomHighlight(props: HighlightProps) {
 
 
 		}}
-		ref={ref}>
+		ref={highlightRef}>
 		{children}
 	</span>
 }
@@ -460,7 +468,7 @@ function CustomComment(props: CommentProps) {
 		hasHover,
 		setSelectedStatus,
 		setHoverStatus,
-		ref } = props;
+		commentRef } = props;
 	return <span
 		data-testid="custom-comment"
 		id={id}
@@ -474,7 +482,7 @@ function CustomComment(props: CommentProps) {
 
 
 		}}
-		ref={ref}>
+		ref={commentRef}>
 		{children}
 	</span>
 }
@@ -485,9 +493,9 @@ export const WithCustomComponents: Story = {
 		Highlight: CustomHighlight,
 		Comment: CustomComment,
 		children: <p>
-			Hello I am some <TextHighlight commentContent={<p>
+			Hello I am some <TextHighlight comment={<p>
 				I am the comment.
-			</p>}>text</TextHighlight>. Here is some more text, and here is the <TextHighlight commentContent={<p>I am the second comment.</p>}>highlight.</TextHighlight>
+			</p>}>text</TextHighlight>. Here is some more text, and here is the <TextHighlight comment={<p>I am the second comment.</p>}>highlight.</TextHighlight>
 		</p>
 	},
 	play: async ({ canvasElement }) => {

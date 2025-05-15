@@ -61,9 +61,6 @@ export type HighlightProps = PropsWithChildren<{
 }>
 
 
-export type MobileToastProps = PropsWithChildren<{
-    onClose: () => void;
-}>;
 
 type TextHighlightContext = {
     registerHighlight: (element: HTMLSpanElement, comment: HTMLDivElement) => void;
@@ -81,7 +78,6 @@ export type TextHighlightProviderProps = PropsWithChildren<{
 }>;
 
 
-const DEFAULT_MEDIA_QUERY = '(max-width: 600px)';
 const TextHighlightContext = React.createContext<TextHighlightContext>({
     registerHighlight: () => {
         throw new Error("registerHighlight not implemented");
@@ -99,17 +95,6 @@ const TextHighlightContext = React.createContext<TextHighlightContext>({
     Highlight: DefaultHighlight,
 });
 
-
-function DefaultMobileToast(props: MobileToastProps) {
-    return <div className="text-highlight-mobile-toast">
-        <button onClick={props.onClose}>
-            Close
-        </button>
-        <div className="text-highlight-mobile-toast-content">
-            {props.children}
-        </div>
-    </div>
-}
 
 function DefaultHighlight(props: HighlightProps) {
 
@@ -143,7 +128,6 @@ function DefaultComment(props: CommentProps) {
         ref={props.commentRef}
         onMouseEnter={(() => props.setHoverStatus(true))}
         onMouseLeave={(() => props.setHoverStatus(false))}
-        onClick={() => props.setSelectedStatus(true)}
         id={props.id}>
         <button
             className="rth-close-button"
@@ -241,11 +225,7 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
             return;
         }
 
-
-
-
         const onResize = () => {
-            console.log("Resizing");
             recalculatePositions(highlightedElementsRef.current);
         }
 
@@ -285,7 +265,7 @@ export function useTextHighlight() {
 
 
 export type TextHighlightProps = {
-    commentContent?: React.ReactNode;
+    comment?: React.ReactNode;
 }
 export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
 
@@ -322,7 +302,7 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
                 setIsSelected(value)
             }, 10)
         }}>
-        {props.commentContent}
+        {props.comment}
     </Comment>;
 
 
@@ -336,6 +316,8 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
             commentId={id}
             setHoverStatus={setHasHover}
             setSelectedStatus={(value) => {
+                // We need the timeouts on these handlers
+                // Because otherwise the click away listener triggers after this click
                 setTimeout(() => {
                     setIsSelected(value)
                 }, 10)
@@ -358,7 +340,6 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: "flex-end",
-                            // visibility: isMobile ? 'hidden' : 'visible',
                         }}>
                             {comment}
 
