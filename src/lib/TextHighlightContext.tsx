@@ -140,7 +140,7 @@ function DefaultComment(props: CommentProps) {
     </div>
 }
 
-function recalculatePositions(mapOfSpansAndComments: Map<HTMLSpanElement, HTMLDivElement>) {
+function recalculatePositions(mapOfSpansAndComments: Map<HTMLSpanElement, HTMLDivElement>, gutterContainer: HTMLElement) {
     const entries = mapOfSpansAndComments.entries();
 
 
@@ -174,6 +174,7 @@ function recalculatePositions(mapOfSpansAndComments: Map<HTMLSpanElement, HTMLDi
         const spanOffset = span.offsetTop;
         const spanHeight = span.offsetHeight;
         const commentHeight = comment.offsetHeight;
+        const gutterContainerOffset = gutterContainer.offsetTop;
 
 
 
@@ -183,7 +184,7 @@ function recalculatePositions(mapOfSpansAndComments: Map<HTMLSpanElement, HTMLDi
             // And that the content sits at the _bottom_ of the container
 
             // Where the top of the comment should be
-            const requiredYPosition = spanOffset + (spanHeight / 2) - (commentHeight / 2);
+            const requiredYPosition = spanOffset + (spanHeight / 2) - (commentHeight / 2) - gutterContainerOffset;
             // How much offset is needed to get the comment to right position, accounting for the accumulated offset
             const requiredOffset = requiredYPosition - accumulatedOffset;
             // Basis should never be negative
@@ -214,7 +215,12 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
 
 
     const recalculatePositionsRef = useRef(() => {
-        recalculatePositions(highlightedElementsRef.current);
+        if (gutterRef.current) {
+            recalculatePositions(highlightedElementsRef.current, gutterRef.current);
+        }
+        else {
+            console.warn("Attempting to recalculate positions before the gutterRef is available. This is probably a bug.");
+        }
     })
 
 
@@ -226,7 +232,7 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
         }
 
         const onResize = () => {
-            recalculatePositions(highlightedElementsRef.current);
+            recalculatePositionsRef.current();
         }
 
         const resizeObserver = new ResizeObserver(onResize);
@@ -243,7 +249,7 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
 
     const registerHighlight = (element: HTMLSpanElement, commentEl: HTMLDivElement) => {
         highlightedElementsRef.current.set(element, commentEl);
-        recalculatePositions(highlightedElementsRef.current);
+        recalculatePositionsRef.current();
     }
 
 

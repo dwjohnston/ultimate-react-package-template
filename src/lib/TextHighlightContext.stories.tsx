@@ -12,22 +12,30 @@ function Demo(props: PropsWithChildren<{
 	const ref = useRef<HTMLDivElement>(null);
 	return (
 
-		<div style={{
-			display: "flex",
-			flexFlow: "row nowrap",
-		}}>
-			<main
-				style={{
-					flex: "1 1 auto",
-				}}>
-				<TextHighlightProvider gutterRef={ref} Highlight={props.Highlight} Comment={props.Comment}>
+		<div>
+			<div style={{
+				height: 100,
+				border: "dotted 1px grey",
+				fontSize: 20
+			}}>I am a header</div>
+			<div style={{
+				display: "flex",
+				flexFlow: "row nowrap",
+			}}>
 
-					{props.children}
-				</TextHighlightProvider >
 
-			</main>
+				<main
+					style={{
+						flex: "1 1 auto",
+					}}>
+					<TextHighlightProvider gutterRef={ref} Highlight={props.Highlight} Comment={props.Comment}>
 
-			{/* 👇 This is the important part
+						{props.children}
+					</TextHighlightProvider >
+
+				</main>
+
+				{/* 👇 This is the important part
 				The container for the comments to sit in. 
 
 				For regular desktop view, this needs to a be a flex container with a column direction. 
@@ -37,9 +45,10 @@ function Demo(props: PropsWithChildren<{
 				And use media queries on the individual comments to to only show them if they are selected.
 
 			*/}
-			<div ref={ref}
-				className="right-gutter"
-			></div>
+				<div ref={ref}
+					className="right-gutter"
+				></div>
+			</div>
 		</div>
 	);
 
@@ -431,6 +440,7 @@ export const SingleHighlight: Story = {
 		</div>
 	}
 }
+
 
 
 function CustomHighlight(props: HighlightProps) {
