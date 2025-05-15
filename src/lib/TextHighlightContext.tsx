@@ -32,7 +32,7 @@ export type CommentProps = PropsWithChildren<{
      * This ref needs to be attached to the main element 
      * 
      */
-    ref: RefObject<HTMLDivElement | null>;
+    commentRef: RefObject<HTMLDivElement | null>;
 
 }>
 
@@ -57,7 +57,7 @@ export type HighlightProps = PropsWithChildren<{
      * This ref needs to be attached to the main element 
      * 
      */
-    ref: RefObject<HTMLSpanElement | null>;
+    highlightRef: RefObject<HTMLSpanElement | null>;
 }>
 
 
@@ -113,13 +113,13 @@ function DefaultMobileToast(props: MobileToastProps) {
 
 function DefaultHighlight(props: HighlightProps) {
 
-    const { hasHover, isSelected, ref, setHoverStatus, setSelectedStatus, commentId } = props;
+    const { hasHover, isSelected, highlightRef, setHoverStatus, setSelectedStatus, commentId } = props;
 
 
     return <span
         data-testid="rth-highlight"
         className={`text-highlight${hasHover ? ' text-highlight-hover' : ''}${isSelected ? ' text-highlight-selected' : ''}`}
-        ref={ref}
+        ref={highlightRef}
         aria-describedby={commentId}
         onMouseEnter={(() => setHoverStatus(true))}
         onMouseLeave={(() => setHoverStatus(false))}
@@ -140,7 +140,7 @@ function DefaultComment(props: CommentProps) {
     return <div
         data-testid="rth-comment"
         className={`text-highlight-comment${props.hasHover ? ' text-highlight-hover' : ''}${props.isSelected ? ' text-highlight-selected' : ''}`}
-        ref={props.ref}
+        ref={props.commentRef}
         onMouseEnter={(() => props.setHoverStatus(true))}
         onMouseLeave={(() => props.setHoverStatus(false))}
         onClick={() => props.setSelectedStatus(true)}
@@ -316,7 +316,7 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
         id={id}
         setHoverStatus={setHasHover}
         hasHover={hasHover}
-        ref={commentRef}
+        commentRef={commentRef}
         setSelectedStatus={(value) => {
             setTimeout(() => {
                 setIsSelected(value)
@@ -332,7 +332,7 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
         <Highlight
             isSelected={isSelected}
             hasHover={hasHover}
-            ref={spanRef}
+            highlightRef={spanRef}
             commentId={id}
             setHoverStatus={setHasHover}
             setSelectedStatus={(value) => {
