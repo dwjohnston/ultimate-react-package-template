@@ -64,6 +64,7 @@ export type HighlightProps = PropsWithChildren<{
 
 type TextHighlightContext = {
     registerHighlight: (element: HTMLSpanElement, comment: HTMLDivElement) => void;
+    unregisterHighlight: (element: HTMLSpanElement) => void;
     requestRecalculatePositions: () => void;
 
     gutterRef: RefObject<HTMLElement | null>;
@@ -251,10 +252,21 @@ export function TextHighlightProvider(props: PropsWithChildren<TextHighlightProv
         highlightedElementsRef.current.set(element, commentEl);
         recalculatePositionsRef.current();
     }
+    const unregisterHighlight = (element: HTMLSpanElement) => {
+        highlightedElementsRef.current.delete(element);
+        recalculatePositionsRef.current();
+    }
 
 
     return <div className="text-highlight-content-container" ref={containerRef}>
-        <TextHighlightContext.Provider value={{ registerHighlight, gutterRef, Comment, Highlight, requestRecalculatePositions: recalculatePositionsRef.current }}>
+        <TextHighlightContext.Provider value={{
+            registerHighlight,
+            unregisterHighlight,
+            gutterRef,
+            Comment,
+            Highlight,
+            requestRecalculatePositions: recalculatePositionsRef.current
+        }}>
             {props.children}
         </TextHighlightContext.Provider>
 
@@ -293,8 +305,14 @@ export function TextHighlight(props: PropsWithChildren<TextHighlightProps>) {
 
         if (spanRef.current && commentRef.current) {
             highlightContext.registerHighlight(spanRef.current, commentRef.current)
+
         }
-    }, [isReady]);
+        return () => {
+            if (spanRef.current) {
+                highlightContext.unregisterHighlight(spanRef.current);
+            }
+        }
+    }, []);
 
 
     const comment = <Comment
