@@ -9,7 +9,7 @@
     "COMMIT_SHA"
 ].forEach((v) => {
     if (!(process.env[v])) {
-        throw new Error(`Env var: '${v}' was not provided`)
+        throw new Error(`❌ Env var: '${v}' was not provided`)
     }
 })
 const {

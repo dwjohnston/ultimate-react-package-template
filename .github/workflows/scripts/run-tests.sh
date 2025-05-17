@@ -10,4 +10,4 @@ fi
 
 deploy_url=$(echo "$output" | grep -o 'Deploy URL: https://[^ ]*' | awk '{print $3}')
 echo "Deploy URL is: $deploy_url"
-TARGET_URL=$deploy_url npm run test-storybook -- --no-index-json
+TARGET_URL=$deploy_url/storybook-static npm run test-storybook -- --no-index-json

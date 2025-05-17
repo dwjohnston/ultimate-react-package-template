@@ -2,11 +2,21 @@
 
 A template for creating and publishing open source React packages. 
 
+Feel free to open pull requests against this repository! 
+
+A good way to see how everything is behaving, is to update the component package yourself and raise a pull request. 
+
+I'll merge anything that isn't too crazy, and adheres to the versioning strategy. 
+
 ## Features
 
 - Branch deploys to Netlify 
 - Tests with Storybook
 - Release management with changesets
+    - PRs will be prompted to provide a changeset 
+    - On successful merge to main, a prerelease package will be published
+    - On successful merge to main, a release PR will automatically be created
+
 
 
 ## Instructions 
