@@ -1,1 +1,1 @@
-export * from "./lib/TextHighlightContext"
+export * from "./lib/MyComponent";

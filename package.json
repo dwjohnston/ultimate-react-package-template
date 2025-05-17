@@ -1,5 +1,5 @@
 {
-  "name": "@blacksheepcode/react-text-highlight",
+  "name": "an-example-react-package-built-with-nextjs-tooling",
   "author": {
     "name": "David Johnston",
     "email": "david@blacksheepcode.com",
@@ -7,9 +7,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dwjohnston/react-text-highlight.git"
+    "url": "git+https://github.com/dwjohnston/ultimate-react-package-template.git"
   },
-  "version": "0.4.0",
+  "version": "0.1.0",
   "private": false,
   "license": "MIT",
   "main": "./dist/exports.js",
@@ -18,6 +18,7 @@
   ],
   "exports": {
     ".": "./dist/exports.js",
+    "./client": "./dist/export-client.js",
     "./dist/main.css": {
       "import": "./dist/main.css",
       "require": "./dist/main.css"
@@ -35,7 +36,6 @@
     "test-storybook": "test-storybook"
   },
   "dependencies": {
-    "react-click-away-listener": "^2.4.0"
   },
   "peerDependencies": {
     "react": ">=16.0.0",
