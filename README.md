@@ -20,6 +20,7 @@ A template for creating and publishing open source React packages.
     - Change the copyright name
 - Log in to Netlify, create new project and add your repository 
 - In Github, set NETLIFY_SITE_ID as a repository variable, and NETLIFY_TOKEN as a repository secret. 
+- Install the [changeset-bot](https://github.com/apps/changeset-bot) to your repository 
 
 
 ## Notes
