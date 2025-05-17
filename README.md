@@ -27,7 +27,9 @@ A template for creating and publishing open source React packages.
 
 - I would prefer to deploy to Github pages, but [branch deploys are not supported](https://github.com/orgs/community/discussions/21582).
 
-### To come
+### 
+
+## To come
 
 - Automated documentation generation 
 
