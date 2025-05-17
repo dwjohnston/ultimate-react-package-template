@@ -34,8 +34,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test-storybook": "test-storybook",
-    "changeset": "@changesets/cli",
-    "release": "@changesets/cli publish"
+    "changeset": "changeset",
+    "release": "changeset publish"
   },
   "peerDependencies": {
     "react": ">=16.0.0",
