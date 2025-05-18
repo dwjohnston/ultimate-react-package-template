@@ -35,15 +35,13 @@ jobs:
         id: changesets
         uses: changesets/action@v1
         with:
-          # This expects you to have a script called release which does a build for your packages and calls changeset publish
           publish: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       
       - name: Publish Prerelease 
         run: |
-          npx changeset version --snapshot ${{ github.sha }}
-          npx changeset publish --tag next
+          npx changeset version --snapshot ${COMMIT_SHA::8}
+          npx changeset publish --tag prerelease
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          COMMIT_SHA: ${{ github.sha }}
