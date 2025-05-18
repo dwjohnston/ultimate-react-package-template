@@ -34,8 +34,8 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       
       - name: Publish Prerelease 
-        run: 
-          - npx changeset version --snapshot ${{ github.sha }}
-          - npx changeset publish --tag next
+        run: |
+          npx changeset version --snapshot ${{ github.sha }}
+          npx changeset publish --tag next
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
