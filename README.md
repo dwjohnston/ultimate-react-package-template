@@ -30,7 +30,7 @@ I'll merge anything that isn't too crazy, and adheres to the versioning strategy
     - Change the copyright name
 - Log in to Netlify, create new project and add your repository 
 - In Github, set NETLIFY_SITE_ID as a repository variable, and NETLIFY_TOKEN as a repository secret. 
-- Create an NPM token and add it as the NPM_TOKEN repository secret
+- In Github, set the NPM_TOKEN repository secret
 - Install the [changeset-bot](https://github.com/apps/changeset-bot) to your repository 
 
 
@@ -38,7 +38,10 @@ I'll merge anything that isn't too crazy, and adheres to the versioning strategy
 
 - I would prefer to deploy to Github pages, but [branch deploys are not supported](https://github.com/orgs/community/discussions/21582).
 
-### 
+- Currently the behaviour is that merging to master will update the 'master docs' (ie. the published docs people will see in regular use), create a prerelease package, and create a release PR. 
+  - This means that until the release PR is merged, your master docs will be ahead of what's actually in the published package. 
+  - I'm working on this, basically I need a way of getting Netlify to only publish the main branch if it has a release tag. Related discussion: https://answers.netlify.com/t/deploy-on-git-tags-only/43759
+
 
 ## To come
 
