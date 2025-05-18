@@ -31,6 +31,13 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Publish Prerelease 
+        run: |
+          npx changeset version --snapshot ${COMMIT_SHA::8}
+          npx changeset publish --tag prerelease
+        env:
+          COMMIT_SHA: ${{ github.sha }}
+
       - name: Create Release Pull Request
         id: changesets
         uses: changesets/action@v1
@@ -39,9 +46,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Publish Prerelease 
-        run: |
-          npx changeset version --snapshot ${COMMIT_SHA::8}
-          npx changeset publish --tag prerelease
-        env:
-          COMMIT_SHA: ${{ github.sha }}
