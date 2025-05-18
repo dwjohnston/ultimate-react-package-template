@@ -35,6 +35,7 @@ jobs:
         run: |
           npx changeset version --snapshot ${COMMIT_SHA::8}
           npx changeset publish --tag prerelease
+          git checkout -- .
         env:
           COMMIT_SHA: ${{ github.sha }}
 
