@@ -42,6 +42,9 @@ I'll merge anything that isn't too crazy, and adheres to the versioning strategy
   - This means that until the release PR is merged, your master docs will be ahead of what's actually in the published package. 
   - I'm working on this, basically I need a way of getting Netlify to only publish the main branch if it has a release tag. Related discussion: https://answers.netlify.com/t/deploy-on-git-tags-only/43759
 
+- The prerelease packages are actually snapshots marked 0.0.0-commitsha-date
+  - It would be nice is they had proper version numbers. It probably won't be a hugely difficult task to achieve this - see https://github.com/changesets/changesets/blob/main/docs/prereleases.md But the note there scares me a bit, but I think the difficulties are more when it comes to monorepos. 
+
 
 ## To come
 

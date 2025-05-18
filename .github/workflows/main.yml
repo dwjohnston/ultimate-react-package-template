@@ -31,12 +31,12 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Check changeset status
-        id: changeset-status
-        run: |
-          npx changeset status
 
-
+      # There is possibly a better way to do this. 
+      # One problem this has is it will still publish snapshots when it's a documentation/pipeline only change
+      # But maybe that's a good thing, an abundance of caution that a configuration change isn't breaking something. 
+      # Also, rather than inspecting the output of the changeset version command, we could use `npx changeset status --output=summary.json` and inspect that.
+      
       - name: Publish Snapshot 
         run: |
           OUTPUT=$(npx changeset version --snapshot ${COMMIT_SHA::8} 2>&1)
