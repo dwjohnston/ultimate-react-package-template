@@ -31,15 +31,27 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish Prerelease 
+      - name: Check changeset status
+        id: changeset-status
         run: |
-          npx changeset version --snapshot ${COMMIT_SHA::8}
+          npx changeset status
+
+
+      - name: Publish Snapshot 
+        run: |
+          OUTPUT=$(npx changeset version --snapshot ${COMMIT_SHA::8} 2>&1)
+              echo "$OUTPUT"
+              if echo "$OUTPUT" | grep -q "No unreleased changesets found, exiting"; then
+                echo "No unreleased changesets found. Skipping snapshot publish."
+                exit 0
+              fi
           npx changeset publish --tag prerelease
           git checkout -- .
         env:
           COMMIT_SHA: ${{ github.sha }}
 
       - name: Create Release Pull Request
+        
         id: changesets
         uses: changesets/action@v1
         with:
