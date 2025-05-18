@@ -9,7 +9,7 @@
     "type": "git",
     "url": "git+https://github.com/dwjohnston/ultimate-react-package-template.git"
   },
-  "version": "0.5.0",
+  "version": "0.6.0",
   "private": false,
   "publishConfig": {
     "access": "public"
