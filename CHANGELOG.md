@@ -1,5 +1,11 @@
 # an-example-react-package-built-with-nextjs-tooling
 
+## 0.7.0
+
+### Minor Changes
+
+- 1fd2c5d: 5
+
 ## 0.6.0
 
 ### Minor Changes
