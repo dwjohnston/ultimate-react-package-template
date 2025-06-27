@@ -29,8 +29,8 @@ I'll merge anything that isn't too crazy, and adheres to the versioning strategy
 - Update LICENSE: 
     - Change the copyright name
 - Log in to Netlify, create new project and add your repository 
-- In Github, set NETLIFY_SITE_ID as a repository variable, and NETLIFY_TOKEN as a repository secret. 
-- In Github, set the NPM_TOKEN repository secret
+- In Github, set NETLIFY_SITE_ID as a repository variable, and NETLIFY_TOKEN as a repository secret. (Generate [PAT here](https://app.netlify.com/user/applications#oauth)) 
+- In Github, set the NPM_TOKEN repository secret 
 - Install the [changeset-bot](https://github.com/apps/changeset-bot) to your repository 
 
 
