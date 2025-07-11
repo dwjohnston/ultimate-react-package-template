@@ -3,6 +3,7 @@ import React from "react";
 /**
  * Props for the MyComponent component
  * @public
+ * @category Components
  */
 export type MyComponentProps = {
     /** The primary text content to display */
@@ -32,6 +33,7 @@ export type MyComponentProps = {
  * ```
  * 
  * @public
+ * @category Components
  */
 export function MyComponent(props: MyComponentProps) {
     return <div data-testid="my-component">This is the component: {props.foo} {props.bar ?? "bar"} {props.chaz ?? "chaz"} {props.delta ?? "delta"}</div>

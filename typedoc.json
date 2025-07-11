@@ -1,17 +1,16 @@
 {
   "$schema": "https://typedoc.org/schema.json",
-  "entryPoints": ["./src/lib"],
-  "entryPointStrategy": "expand",
+  "entryPoints": ["./src/lib/index.ts"],
   "out": "./docs",
   "name": "Ultimate React Package Template - API Documentation",
   "includeVersion": true,
   "readme": "./README.md",
-  "categorizeByGroup": false,
   "excludeExternals": true,
   "excludePrivate": true,
   "excludeProtected": true,
   "hideGenerator": true,
   "sort": ["source-order"],
+  "disableSources": false,
   "visibilityFilters": {
     "protected": false,
     "private": false,
@@ -20,6 +19,12 @@
   },
   "navigation": {
     "includeCategories": true,
-    "includeGroups": true
-  }
+    "includeGroups": false
+  },
+  "categorizeByGroup": false,
+  "defaultCategory": "Other",
+  "categoryOrder": [
+    "Components",
+    "*"
+  ]
 }

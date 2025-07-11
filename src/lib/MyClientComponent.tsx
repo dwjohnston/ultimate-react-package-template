@@ -15,6 +15,7 @@ import React, { useEffect } from "react";
  * ```
  * 
  * @public
+ * @category Components
  */
 export function MyClientComponent() {
 
