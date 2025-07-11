@@ -1,0 +1,47 @@
+.nav {
+  padding: 0;
+}
+
+.section {
+  margin-bottom: 32px;
+}
+
+.sectionTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list li {
+  margin-bottom: 4px;
+}
+
+.link {
+  display: block;
+  padding: 6px 12px;
+  color: #4b5563;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.link:hover {
+  color: #1f2937;
+  background-color: #e5e7eb;
+}
+
+.link[aria-current="page"] {
+  color: #1f2937;
+  background-color: #dbeafe;
+  font-weight: 500;
+}
