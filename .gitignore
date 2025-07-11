@@ -2,7 +2,7 @@
 
 dist/
 storybook-static
-docs/
+/docs/
 # dependencies
 /node_modules
 /.pnp
