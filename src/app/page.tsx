@@ -6,9 +6,15 @@ export default function Home() {
   return (
     <div>
       <p>
-        While most of your work should be done in Storybook, it can still be useful to use the Next app as a sandbox.
+        This is your site documentation page.
+      </p>
+
+      <p>
+        The component:
       </p>
       <MyComponent foo="foo" />
+
+      See also, the Storybook at <a href="/storybook-static/index.html">/storybook-static/index.html</a>.
     </div>
 
   );
