@@ -12,6 +12,7 @@ I'll merge anything that isn't too crazy, and adheres to the versioning strategy
 
 - Branch deploys to Netlify 
 - Tests with Storybook
+- **Automated API documentation generation with TypeDoc**
 - Release management with changesets
     - PRs will be prompted to provide a changeset 
     - On successful merge to main, a prerelease package will be published
@@ -34,6 +35,55 @@ I'll merge anything that isn't too crazy, and adheres to the versioning strategy
 - Install the [changeset-bot](https://github.com/apps/changeset-bot) to your repository 
 
 
+## Documentation
+
+This template includes automated API documentation generation using [TypeDoc](https://typedoc.org/). The documentation is generated from TSDoc comments in your code.
+
+### Writing Documentation
+
+Use TSDoc comments to document your components, functions, and types:
+
+```tsx
+/**
+ * A demonstration React component that displays text and numeric values
+ * 
+ * @param props - The component props
+ * @returns A div element displaying the provided values
+ * 
+ * @example
+ * ```tsx
+ * <MyComponent 
+ *   foo="Hello"
+ *   bar="World"
+ *   chaz={42}
+ *   delta={3.14}
+ * />
+ * ```
+ * 
+ * @public
+ */
+export function MyComponent(props: MyComponentProps) {
+  // component implementation
+}
+```
+
+### Generating Documentation
+
+The documentation is automatically generated during the build process, but you can also generate it manually:
+
+```bash
+# Generate documentation
+npm run build:docs
+
+# Serve documentation locally
+npm run docs:serve
+```
+
+The documentation will be available at:
+- During development: `http://localhost:8080` (when using `docs:serve`)
+- In the deployed site: `/docs` (integrated into the Next.js build) 
+
+
 ## Notes
 
 - I would prefer to deploy to Github pages, but [branch deploys are not supported](https://github.com/orgs/community/discussions/21582).
@@ -48,7 +98,7 @@ I'll merge anything that isn't too crazy, and adheres to the versioning strategy
 
 ## To come
 
-- Automated documentation generation 
+(This feature has been implemented! ✅ Documentation is now generated automatically from TSDoc comments.) 
 
 
 
