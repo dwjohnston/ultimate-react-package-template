@@ -12,7 +12,8 @@ export default function Home() {
         <strong>Links:</strong>
         <ul>
           <li><a href="/storybook-static" target="_blank" rel="noopener noreferrer">Component Stories (Storybook)</a></li>
-          <li><a href="/docs" target="_blank" rel="noopener noreferrer">API Documentation (TypeDoc)</a></li>
+          <li><a href="/docs">Documentation Site</a></li>
+          <li><a href="/docs/index.html" target="_blank" rel="noopener noreferrer">Full API Documentation (TypeDoc)</a></li>
         </ul>
       </p>
       <MyComponent foo="foo" />
