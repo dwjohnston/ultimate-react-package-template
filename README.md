@@ -1,5 +1,11 @@
 # Ultimate react package template 
 
+
+Documentation page: https://ultimate-react-package-template.netlify.app/
+
+NPM: https://www.npmjs.com/package/an-example-react-package-built-with-nextjs-tooling
+
+
 A template for creating and publishing open source React packages. 
 
 Feel free to open pull requests against this repository! 
