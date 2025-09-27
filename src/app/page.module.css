@@ -66,11 +66,7 @@
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
-  margin-bottom: 32px;
-  width: 100%;
+
   max-width: 1000px;
 }
 
@@ -79,6 +75,7 @@
   border: 1px solid var(--gray-alpha-200);
   border-radius: 8px;
   padding: 24px;
+  margin: 24px;
 }
 
 .card h2 {
@@ -139,6 +136,7 @@
 
 .ctas {
   display: flex;
+  justify-content: center;
   gap: 16px;
 }
 

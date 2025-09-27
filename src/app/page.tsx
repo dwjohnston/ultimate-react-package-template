@@ -7,42 +7,15 @@ export default function Home() {
     <div className={styles.page}>
       <main className={styles.main}>
         <div className={styles.center}>
-          <h1 className={styles.title}>Ultimate React Package Template</h1>
+          <h1 className={styles.title}>Sample Component</h1>
           <p className={styles.description}>
-            A comprehensive template for creating and publishing open source React packages with Next.js tooling, Storybook, and automated release management.
+            This is a sample React component package created with Ulitimate React Package Template.
+          </p>
+          <p>
+            See the Github for creating your own package.
           </p>
         </div>
 
-        <div className={styles.grid}>
-          <div className={styles.card}>
-            <h2>Installation</h2>
-            <p>Install the package via npm:</p>
-            <code className={styles.code}>npm install an-example-react-package-built-with-nextjs-tooling</code>
-            <p>Then import and use the components:</p>
-            <code className={styles.code}>
-              import {"{ MyComponent }"} from &apos;an-example-react-package-built-with-nextjs-tooling&apos;;
-            </code>
-          </div>
-
-          <div className={styles.card}>
-            <h2>Example Usage</h2>
-            <p>Here&apos;s how to use the main component:</p>
-            <div className={styles.example}>
-              <MyComponent foo="example" bar="value" />
-            </div>
-          </div>
-
-          <div className={styles.card}>
-            <h2>Features</h2>
-            <ul>
-              <li>TypeScript support</li>
-              <li>Storybook integration</li>
-              <li>Automated testing</li>
-              <li>Release management with changesets</li>
-              <li>Branch deploys to Netlify</li>
-            </ul>
-          </div>
-        </div>
 
         <div className={styles.ctas}>
           <a
@@ -60,6 +33,30 @@ export default function Home() {
             Explore Storybook
           </a>
         </div>
+
+        <div className={styles.grid}>
+
+          <div className={styles.card}>
+            <h2>Installation</h2>
+            <p>Install the package via npm:</p>
+            <code className={styles.code}>npm install an-example-react-package-built-with-nextjs-tooling</code>
+            <p>Then import and use the components:</p>
+            <code className={styles.code}>
+              import {"{ MyComponent }"} from &apos;an-example-react-package-built-with-nextjs-tooling&apos;;
+            </code>
+          </div>
+
+          <div className={styles.card}>
+            <h2>Example Usage</h2>
+            <p>Here&apos;s the component:</p>
+            <div className={styles.example}>
+              <MyComponent foo="example" bar="value" />
+            </div>
+          </div>
+
+        </div>
+
+
       </main>
     </div>
   );
