@@ -44,6 +44,84 @@
   list-style-position: inside;
 }
 
+.center {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--foreground);
+}
+
+.description {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: var(--foreground);
+  opacity: 0.8;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.grid {
+
+  max-width: 1000px;
+}
+
+.card {
+  background: var(--gray-alpha-100);
+  border: 1px solid var(--gray-alpha-200);
+  border-radius: 8px;
+  padding: 24px;
+  margin: 24px;
+}
+
+.card h2 {
+  margin-bottom: 16px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.card p {
+  margin-bottom: 12px;
+  line-height: 1.5;
+  color: var(--foreground);
+  opacity: 0.8;
+}
+
+.card ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.card li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+  color: var(--foreground);
+  opacity: 0.8;
+}
+
+.code {
+  font-family: var(--font-geist-mono);
+  background: var(--gray-alpha-200);
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  display: block;
+  margin: 8px 0;
+  overflow-x: auto;
+}
+
+.example {
+  background: var(--gray-alpha-200);
+  padding: 16px;
+  border-radius: 4px;
+  margin-top: 12px;
+}
+
 .main li:not(:last-of-type) {
   margin-bottom: 8px;
 }
@@ -58,6 +136,7 @@
 
 .ctas {
   display: flex;
+  justify-content: center;
   gap: 16px;
 }
 
@@ -158,6 +237,28 @@ a.secondary {
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .description {
+    font-size: 1rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .code {
+    font-size: 12px;
+    padding: 6px 8px;
   }
 }
 
