@@ -1,0 +1,546 @@
+{
+	"schemaVersion": "2.0",
+	"id": 0,
+	"name": "Ultimate React Package Template - API Documentation",
+	"variant": "project",
+	"kind": 1,
+	"flags": {},
+	"comment": {
+		"summary": [
+			{
+				"kind": "text",
+				"text": "Main exports for the Ultimate React Package Template"
+			}
+		]
+	},
+	"children": [
+		{
+			"id": 10,
+			"name": "MyClientComponent",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {
+				"isPublic": true
+			},
+			"sources": [
+				{
+					"fileName": "MyClientComponent.tsx",
+					"line": 20,
+					"character": 16,
+					"url": "https://github.com/dwjohnston/ultimate-react-package-template/blob/2f14b8e6c575eea498b7d1cd9561579c51df99d4/src/lib/MyClientComponent.tsx#L20"
+				}
+			],
+			"signatures": [
+				{
+					"id": 11,
+					"name": "MyClientComponent",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {
+						"isPublic": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "A client-side React component that demonstrates useEffect hook usage\n\nThis component must be rendered on the client side (uses \"use client\" directive)\nand logs a message when it mounts."
+							}
+						],
+						"blockTags": [
+							{
+								"tag": "@returns",
+								"content": [
+									{
+										"kind": "text",
+										"text": "A div element with static text"
+									}
+								]
+							},
+							{
+								"tag": "@example",
+								"content": [
+									{
+										"kind": "code",
+										"text": "```tsx\n<MyClientComponent />\n```"
+									}
+								]
+							},
+							{
+								"tag": "@category",
+								"content": [
+									{
+										"kind": "text",
+										"text": "Components"
+									}
+								]
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "MyClientComponent.tsx",
+							"line": 20,
+							"character": 16,
+							"url": "https://github.com/dwjohnston/ultimate-react-package-template/blob/2f14b8e6c575eea498b7d1cd9561579c51df99d4/src/lib/MyClientComponent.tsx#L20"
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@types/react",
+							"packagePath": "index.d.ts",
+							"qualifiedName": "React.JSX.Element"
+						},
+						"name": "Element",
+						"package": "@types/react",
+						"qualifiedName": "React.JSX.Element"
+					}
+				}
+			]
+		},
+		{
+			"id": 4,
+			"name": "MyComponentProps",
+			"variant": "declaration",
+			"kind": 2097152,
+			"flags": {
+				"isPublic": true
+			},
+			"comment": {
+				"summary": [
+					{
+						"kind": "text",
+						"text": "Props for the MyComponent component"
+					}
+				],
+				"blockTags": [
+					{
+						"tag": "@category",
+						"content": [
+							{
+								"kind": "text",
+								"text": "Components"
+							}
+						]
+					}
+				]
+			},
+			"children": [
+				{
+					"id": 6,
+					"name": "foo",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "The primary text content to display"
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "MyComponent.tsx",
+							"line": 10,
+							"character": 4,
+							"url": "https://github.com/dwjohnston/ultimate-react-package-template/blob/2f14b8e6c575eea498b7d1cd9561579c51df99d4/src/lib/MyComponent.tsx#L10"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 7,
+					"name": "bar",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Optional secondary text content"
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "MyComponent.tsx",
+							"line": 12,
+							"character": 4,
+							"url": "https://github.com/dwjohnston/ultimate-react-package-template/blob/2f14b8e6c575eea498b7d1cd9561579c51df99d4/src/lib/MyComponent.tsx#L12"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "string"
+					}
+				},
+				{
+					"id": 8,
+					"name": "chaz",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Optional numeric value for customization"
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "MyComponent.tsx",
+							"line": 14,
+							"character": 4,
+							"url": "https://github.com/dwjohnston/ultimate-react-package-template/blob/2f14b8e6c575eea498b7d1cd9561579c51df99d4/src/lib/MyComponent.tsx#L14"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				},
+				{
+					"id": 9,
+					"name": "delta",
+					"variant": "declaration",
+					"kind": 1024,
+					"flags": {
+						"isOptional": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "Optional delta value for calculations"
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "MyComponent.tsx",
+							"line": 16,
+							"character": 4,
+							"url": "https://github.com/dwjohnston/ultimate-react-package-template/blob/2f14b8e6c575eea498b7d1cd9561579c51df99d4/src/lib/MyComponent.tsx#L16"
+						}
+					],
+					"type": {
+						"type": "intrinsic",
+						"name": "number"
+					}
+				}
+			],
+			"groups": [
+				{
+					"title": "Properties",
+					"children": [
+						6,
+						7,
+						8,
+						9
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "MyComponent.tsx",
+					"line": 8,
+					"character": 12,
+					"url": "https://github.com/dwjohnston/ultimate-react-package-template/blob/2f14b8e6c575eea498b7d1cd9561579c51df99d4/src/lib/MyComponent.tsx#L8"
+				}
+			]
+		},
+		{
+			"id": 1,
+			"name": "MyComponent",
+			"variant": "declaration",
+			"kind": 64,
+			"flags": {
+				"isPublic": true
+			},
+			"sources": [
+				{
+					"fileName": "MyComponent.tsx",
+					"line": 38,
+					"character": 16,
+					"url": "https://github.com/dwjohnston/ultimate-react-package-template/blob/2f14b8e6c575eea498b7d1cd9561579c51df99d4/src/lib/MyComponent.tsx#L38"
+				}
+			],
+			"signatures": [
+				{
+					"id": 2,
+					"name": "MyComponent",
+					"variant": "signature",
+					"kind": 4096,
+					"flags": {
+						"isPublic": true
+					},
+					"comment": {
+						"summary": [
+							{
+								"kind": "text",
+								"text": "A demonstration React component that displays text and numeric values"
+							}
+						],
+						"blockTags": [
+							{
+								"tag": "@returns",
+								"content": [
+									{
+										"kind": "text",
+										"text": "A div element displaying the provided values"
+									}
+								]
+							},
+							{
+								"tag": "@example",
+								"content": [
+									{
+										"kind": "code",
+										"text": "```tsx\n<MyComponent \n  foo=\"Hello\"\n  bar=\"World\"\n  chaz={42}\n  delta={3.14}\n/>\n```"
+									}
+								]
+							},
+							{
+								"tag": "@category",
+								"content": [
+									{
+										"kind": "text",
+										"text": "Components"
+									}
+								]
+							}
+						]
+					},
+					"sources": [
+						{
+							"fileName": "MyComponent.tsx",
+							"line": 38,
+							"character": 16,
+							"url": "https://github.com/dwjohnston/ultimate-react-package-template/blob/2f14b8e6c575eea498b7d1cd9561579c51df99d4/src/lib/MyComponent.tsx#L38"
+						}
+					],
+					"parameters": [
+						{
+							"id": 3,
+							"name": "props",
+							"variant": "param",
+							"kind": 32768,
+							"flags": {},
+							"comment": {
+								"summary": [
+									{
+										"kind": "text",
+										"text": "The component props"
+									}
+								]
+							},
+							"type": {
+								"type": "reference",
+								"target": 4,
+								"name": "MyComponentProps",
+								"package": "an-example-react-package-built-with-nextjs-tooling"
+							}
+						}
+					],
+					"type": {
+						"type": "reference",
+						"target": {
+							"packageName": "@types/react",
+							"packagePath": "index.d.ts",
+							"qualifiedName": "React.JSX.Element"
+						},
+						"name": "Element",
+						"package": "@types/react",
+						"qualifiedName": "React.JSX.Element"
+					}
+				}
+			]
+		}
+	],
+	"groups": [
+		{
+			"title": "Type Aliases",
+			"children": [
+				4
+			]
+		},
+		{
+			"title": "Functions",
+			"children": [
+				10,
+				1
+			]
+		}
+	],
+	"categories": [
+		{
+			"title": "Components",
+			"children": [
+				10,
+				4,
+				1
+			]
+		}
+	],
+	"packageName": "an-example-react-package-built-with-nextjs-tooling",
+	"packageVersion": "0.8.0",
+	"readme": [
+		{
+			"kind": "text",
+			"text": "# Ultimate react package template \n\nA template for creating and publishing open source React packages. \n\nFeel free to open pull requests against this repository! \n\nA good way to see how everything is behaving, is to update the component package yourself and raise a pull request. \n\nI'll merge anything that isn't too crazy, and adheres to the versioning strategy. \n\n## Features\n\n- Branch deploys to Netlify \n- Tests with Storybook\n- **Automated API documentation generation with TypeDoc**\n- Release management with changesets\n    - PRs will be prompted to provide a changeset \n    - On successful merge to main, a prerelease package will be published\n    - On successful merge to main, a release PR will automatically be created\n\n\n\n## Instructions \n\n- Fork/clone the repo. \n- Update package.json: \n    - Change the author details\n    - Change the package name\n    - Change the repository details\n- Update LICENSE: \n    - Change the copyright name\n- Log in to Netlify, create new project and add your repository \n- In Github, set NETLIFY_SITE_ID as a repository variable, and NETLIFY_TOKEN as a repository secret. (Generate [PAT here](https://app.netlify.com/user/applications#oauth)) \n- In Github, set the NPM_TOKEN repository secret \n- Install the [changeset-bot](https://github.com/apps/changeset-bot) to your repository \n\n\n## Documentation\n\nThis template includes automated API documentation generation using [TypeDoc](https://typedoc.org/). The documentation is generated from TSDoc comments in your code.\n\n### Writing Documentation\n\nUse TSDoc comments to document your components, functions, and types:\n\n"
+		},
+		{
+			"kind": "code",
+			"text": "```tsx\n/**\n * A demonstration React component that displays text and numeric values\n * \n * @param props - The component props\n * @returns A div element displaying the provided values\n * \n * @example\n * ```"
+		},
+		{
+			"kind": "text",
+			"text": "tsx\n * <MyComponent \n *   foo=\"Hello\"\n *   bar=\"World\"\n *   chaz="
+		},
+		{
+			"kind": "text",
+			"text": "{42"
+		},
+		{
+			"kind": "text",
+			"text": "}"
+		},
+		{
+			"kind": "text",
+			"text": "\n *   delta="
+		},
+		{
+			"kind": "text",
+			"text": "{3.14"
+		},
+		{
+			"kind": "text",
+			"text": "}"
+		},
+		{
+			"kind": "text",
+			"text": "\n * />\n * "
+		},
+		{
+			"kind": "code",
+			"text": "```\n * \n * @public\n */\nexport function MyComponent(props: MyComponentProps) {\n  // component implementation\n}\n```"
+		},
+		{
+			"kind": "text",
+			"text": "\n\n### Generating Documentation\n\nThe documentation is automatically generated during the build process, but you can also generate it manually:\n\n"
+		},
+		{
+			"kind": "code",
+			"text": "```bash\n# Generate documentation\nnpm run build:docs\n\n# Serve documentation locally\nnpm run docs:serve\n```"
+		},
+		{
+			"kind": "text",
+			"text": "\n\nThe documentation will be available at:\n- During development: "
+		},
+		{
+			"kind": "code",
+			"text": "`http://localhost:8080`"
+		},
+		{
+			"kind": "text",
+			"text": " (when using "
+		},
+		{
+			"kind": "code",
+			"text": "`docs:serve`"
+		},
+		{
+			"kind": "text",
+			"text": ")\n- In the deployed site: "
+		},
+		{
+			"kind": "code",
+			"text": "`/docs`"
+		},
+		{
+			"kind": "text",
+			"text": " (integrated into the Next.js build) \n\n\n## Notes\n\n- I would prefer to deploy to Github pages, but [branch deploys are not supported](https://github.com/orgs/community/discussions/21582).\n\n- Currently the behaviour is that merging to master will update the 'master docs' (ie. the published docs people will see in regular use), create a prerelease package, and create a release PR. \n  - This means that until the release PR is merged, your master docs will be ahead of what's actually in the published package. \n  - I'm working on this, basically I need a way of getting Netlify to only publish the main branch if it has a release tag. Related discussion: https://answers.netlify.com/t/deploy-on-git-tags-only/43759\n\n- The prerelease packages are actually snapshots marked 0.0.0-commitsha-date\n  - It would be nice is they had proper version numbers. It probably won't be a hugely difficult task to achieve this - see https://github.com/changesets/changesets/blob/main/docs/prereleases.md But the note there scares me a bit, but I think the difficulties are more when it comes to monorepos. \n\n\n## To come\n\n(This feature has been implemented! ✅ Documentation is now generated automatically from TSDoc comments.)"
+		}
+	],
+	"symbolIdMap": {
+		"0": {
+			"packageName": "an-example-react-package-built-with-nextjs-tooling",
+			"packagePath": "src/lib/index.ts",
+			"qualifiedName": ""
+		},
+		"1": {
+			"packageName": "an-example-react-package-built-with-nextjs-tooling",
+			"packagePath": "src/lib/MyComponent.tsx",
+			"qualifiedName": "MyComponent"
+		},
+		"2": {
+			"packageName": "an-example-react-package-built-with-nextjs-tooling",
+			"packagePath": "src/lib/MyComponent.tsx",
+			"qualifiedName": "MyComponent"
+		},
+		"3": {
+			"packageName": "an-example-react-package-built-with-nextjs-tooling",
+			"packagePath": "src/lib/MyComponent.tsx",
+			"qualifiedName": "props"
+		},
+		"4": {
+			"packageName": "an-example-react-package-built-with-nextjs-tooling",
+			"packagePath": "src/lib/MyComponent.tsx",
+			"qualifiedName": "MyComponentProps"
+		},
+		"6": {
+			"packageName": "an-example-react-package-built-with-nextjs-tooling",
+			"packagePath": "src/lib/MyComponent.tsx",
+			"qualifiedName": "__type.foo"
+		},
+		"7": {
+			"packageName": "an-example-react-package-built-with-nextjs-tooling",
+			"packagePath": "src/lib/MyComponent.tsx",
+			"qualifiedName": "__type.bar"
+		},
+		"8": {
+			"packageName": "an-example-react-package-built-with-nextjs-tooling",
+			"packagePath": "src/lib/MyComponent.tsx",
+			"qualifiedName": "__type.chaz"
+		},
+		"9": {
+			"packageName": "an-example-react-package-built-with-nextjs-tooling",
+			"packagePath": "src/lib/MyComponent.tsx",
+			"qualifiedName": "__type.delta"
+		},
+		"10": {
+			"packageName": "an-example-react-package-built-with-nextjs-tooling",
+			"packagePath": "src/lib/MyClientComponent.tsx",
+			"qualifiedName": "MyClientComponent"
+		},
+		"11": {
+			"packageName": "an-example-react-package-built-with-nextjs-tooling",
+			"packagePath": "src/lib/MyClientComponent.tsx",
+			"qualifiedName": "MyClientComponent"
+		}
+	},
+	"files": {
+		"entries": {
+			"1": "src/lib/index.ts",
+			"2": "README.md",
+			"3": ""
+		},
+		"reflections": {
+			"1": 0,
+			"2": 0,
+			"3": 0
+		}
+	}
+}

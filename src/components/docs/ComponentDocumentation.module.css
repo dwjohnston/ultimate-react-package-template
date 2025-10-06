@@ -1,0 +1,128 @@
+.content {
+  max-width: 800px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 16px 0;
+}
+
+.description {
+  font-size: 18px;
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0 0 32px 0;
+}
+
+.section {
+  margin-bottom: 32px;
+}
+
+.section h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 16px 0;
+}
+
+.propsTable {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.propRow {
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.propRow:last-child {
+  border-bottom: none;
+}
+
+.propHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.propName {
+  font-weight: 600;
+  color: #1f2937;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+}
+
+.propType {
+  padding: 2px 6px;
+  background-color: #f3f4f6;
+  color: #374151;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+}
+
+.type {
+  color: #1d4ed8;
+}
+
+.literal {
+  color: #059669;
+}
+
+.propDescription {
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.example {
+  margin-bottom: 16px;
+}
+
+.codeBlock {
+  background-color: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 16px;
+  overflow-x: auto;
+}
+
+.codeBlock pre {
+  margin: 0;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.codeBlock code {
+  color: #374151;
+}
+
+.notFound {
+  padding: 24px;
+  text-align: center;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.notFound code {
+  background-color: #f3f4f6;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 13px;
+}
+
+.link {
+  color: #3b82f6;
+  text-decoration: underline;
+}
+
+.link:hover {
+  color: #1d4ed8;
+}
