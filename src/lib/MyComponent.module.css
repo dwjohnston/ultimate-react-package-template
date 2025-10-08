@@ -1,0 +1,35 @@
+/* MyComponent.module.css - CSS Modules for MyComponent */
+.container {
+    padding: 1rem;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    background-color: #f0f8ff;
+    font-family: Arial, sans-serif;
+}
+
+.container:hover {
+    background-color: #e6f2ff;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+}
+
+.text {
+    color: #333;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .container {
+        background-color: #1a2332;
+        border-color: #4a90e2;
+    }
+    
+    .container:hover {
+        background-color: #243447;
+    }
+    
+    .text {
+        color: #e0e0e0;
+    }
+}

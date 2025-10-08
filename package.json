@@ -25,6 +25,10 @@
     "./dist/main.css": {
       "import": "./dist/main.css",
       "require": "./dist/main.css"
+    },
+    "./dist/MyComponent.module.css": {
+      "import": "./dist/MyComponent.module.css",
+      "require": "./dist/MyComponent.module.css"
     }
   },
   "scripts": {

@@ -31,7 +31,8 @@
     }
   },
   "include": [
-    "src/exports.ts"
+    "src/exports.ts",
+    "src/css-modules.d.ts"
   ],
   "exclude": [
     "node_modules"
