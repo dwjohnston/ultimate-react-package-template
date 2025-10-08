@@ -1,19 +1,27 @@
 /* MyComponent.module.css - CSS Modules for MyComponent */
+
+/* CSS Variables for theming - consumers can override these */
 .container {
+    --my-component-border-color: #007bff;
+    --my-component-bg-color: #f0f8ff;
+    --my-component-bg-hover: #e6f2ff;
+    --my-component-text-color: #333;
+    --my-component-shadow: rgba(0, 123, 255, 0.2);
+    
     padding: 1rem;
-    border: 2px solid #007bff;
+    border: 2px solid var(--my-component-border-color);
     border-radius: 8px;
-    background-color: #f0f8ff;
+    background-color: var(--my-component-bg-color);
     font-family: Arial, sans-serif;
 }
 
 .container:hover {
-    background-color: #e6f2ff;
-    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+    background-color: var(--my-component-bg-hover);
+    box-shadow: 0 2px 8px var(--my-component-shadow);
 }
 
 .text {
-    color: #333;
+    color: var(--my-component-text-color);
     font-size: 1rem;
     margin: 0;
 }
@@ -21,15 +29,10 @@
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
     .container {
-        background-color: #1a2332;
-        border-color: #4a90e2;
-    }
-    
-    .container:hover {
-        background-color: #243447;
-    }
-    
-    .text {
-        color: #e0e0e0;
+        --my-component-border-color: #4a90e2;
+        --my-component-bg-color: #1a2332;
+        --my-component-bg-hover: #243447;
+        --my-component-text-color: #e0e0e0;
+        --my-component-shadow: rgba(74, 144, 226, 0.2);
     }
 }

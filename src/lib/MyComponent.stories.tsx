@@ -52,3 +52,31 @@ export const WithCustomStyling: Story = {
         expect(myComponent.className).toContain("custom-override");
     }
 }
+
+export const WithCSSVariables: Story = {
+    args: {
+        foo: "Themed with CSS variables!",
+        className: "css-var-theme"
+    },
+    decorators: [
+        (Story) => (
+            <>
+                <style>{`
+                    .css-var-theme {
+                        --my-component-border-color: #28a745;
+                        --my-component-bg-color: #e6f9e6;
+                        --my-component-bg-hover: #ccf2cc;
+                        --my-component-text-color: #155724;
+                    }
+                `}</style>
+                <Story />
+            </>
+        )
+    ],
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+        const myComponent = await canvas.findByTestId("my-component");
+        expect(myComponent).toBeInTheDocument();
+        expect(myComponent).toHaveTextContent("Themed with CSS variables!");
+    }
+}
