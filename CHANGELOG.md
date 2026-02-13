@@ -1,5 +1,11 @@
 # an-example-react-package-built-with-nextjs-tooling
 
+## 0.9.0
+
+### Minor Changes
+
+- 354a365: Adds link to the Storybook in the site docs.
+
 ## 0.8.0
 
 ### Minor Changes
